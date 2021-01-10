@@ -1,0 +1,1 @@
+# stupo-store
