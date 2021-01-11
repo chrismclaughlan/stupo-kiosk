@@ -126,19 +126,19 @@ const postUsers = (query, cols, action, queryReq, db, res) => {
 }
 
 const logDB = (db, userID, values) => {
-    const query = 'INSERT INTO stupo_kiosk_dev.products_logs(user_id, user_username, action, product_id, product_name, product_price) VALUES(?, (SELECT username FROM stupo_kiosk_dev.users WHERE id = ?), ?, ?, ?, ?)';
+    const query = 'INSERT INTO stupo_kiosk_dev.products_logs(user_id, user_username, action, product_id, product_name, product_quantity, product_price) VALUES(?, (SELECT username FROM stupo_kiosk_dev.users WHERE id = ?), ?, ?, ?, ?, ?)';
     const cols = [userID, userID];
 
-    if (!userID || !values.action || !values.name) {
+    if (!userID || !values.action || !values.id) {
         utils.printMessage(CONSOLE_RED, 'DB logs ', 'ERROR', 'Required column(s) not defined');
         return false;
     }
 
     cols.push(values.action);
-    cols.push(values.name);
+    cols.push(values.id);
+    values.name ? cols.push(values.name) : cols.push(null);
     values.quantity ? cols.push(values.quantity) : cols.push(null);
-    values.bookcase ? cols.push(values.bookcase) : cols.push(null);
-    values.shelf ? cols.push(values.shelf) : cols.push(null);
+    values.price ? cols.push(values.price) : cols.push(null);
 
     db.query(query, cols, (err, results) => {
         if (err) {

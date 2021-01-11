@@ -1,0 +1,224 @@
+.App {
+    text-align: center;
+  }
+  
+  .App-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+  
+  .App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .App-link {
+    color: #61dafb;
+  }
+  
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .spinner-border {
+    position: fixed;
+    z-index: 999;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .spinner-text {
+    position: absolute;
+    z-index: 999;
+    overflow: show;
+    margin-top: 60px;
+    top: 47%;
+  }
+  
+  .center-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 80vh;
+  }
+  
+  .search-bar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .loginForm {
+    background-color: #343a40;
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+  }
+  
+  .Footer {
+    background-color: white;
+    border-top: 1px solid grey;
+  }
+  
+  .titleText {
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.2;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    margin-top: -5px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid white
+  }
+  
+  .FormLabel {
+    font-size: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 15px;
+  
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.2;
+  
+    text-align: center;
+    border-bottom: 1px solid grey
+  }
+  
+  .searchBarInput {
+    width: 100%;
+  }
+  
+  .DBModify {
+    padding: 0px 20px 20px 20px;
+  }
+  
+  .DBTable {
+    min-height: 30vmax;
+    max-height: 38vmax;
+    /* overflow-y: auto; */
+  }
+  
+  .UsersTable {
+    height: 30vmax;
+  }
+  
+  .ErrorAlert {
+    display: inline-block;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    text-align: center;
+  
+    overflow: hidden !important;
+    overflow-wrap: break-word !important;
+    max-width: 40%;
+    max-height: 3.5rem;
+  
+    width: auto;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, 0);
+  
+    margin-bottom: 0px;
+    margin-top: 10px;
+  
+    color: white;
+  }
+  
+  .ErrorAlert:hover {
+    box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.2);
+    max-height: none;
+    /* bottom: -25rem; */
+  }
+  
+  .pagination {
+    position: fixed;
+    width: auto;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, 0);
+    bottom: 0;
+  }
+  
+  .hidden-button {
+    /* visibility: hidden; */
+    /* background: 0; */
+    width: 20px;
+    /* opacity: 0%; */
+    /* transition: transform 0.5s ease, opacity 0.5s ease-out;
+    transform: translate(40%, 0); */
+  }
+  
+  .hidden-button .AppButton:hover {
+    /* visibility: hidden; */
+    /* background: 0; */
+    background-color: red !important;
+    /* opacity: 0%; */
+    /* transition: transform 0.5s ease, opacity 0.5s ease-out;
+    transform: translate(40%, 0); */
+  }
+  
+  .AppButton {
+    background-color: grey !important;
+    border-color: grey !important;
+    color: white;
+  }
+  
+  .page-item .page-link {
+    visibility: visible;
+  }
+  
+  .page-item.disabled .page-link {
+    visibility: hidden;
+  }
+  
+  .DBTable {
+    padding-top: 20px;
+  }
+  
+  .HelpButton {
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    opacity: 50%;
+  }
+  
+  .HelpButton:hover {
+    opacity: 100%;
+    transition: all 0.5s ease;
+  }
+  
+  .DBTable tr:hover td {
+    background-color: rgba(135,206,235, 0.2) !important;
+  
+  }
+  
+  .DBTable .table-striped tbody tr:nth-of-type(odd) {
+    background-color:  rgba(0,0,0, 0.05);
+  }

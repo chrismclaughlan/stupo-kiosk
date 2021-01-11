@@ -112,25 +112,25 @@ app.get('/api/users', auth.userAuthorised, function(req, res) {
 app.get('/api/products', auth.userAuthenticated, function(req, res) {
     let query, cols = [];
 
-    let {name, similar} = req.query;
+    let {id, similar} = req.query;
 
-    if (! name) {
+    if (! id) {
         query = 'SELECT * FROM products';
     } else {
 
         if (similar) {
-            query = `SELECT * FROM products WHERE name LIKE ?`;
-            cols.push(name + '%');
+            query = `SELECT * FROM products WHERE id LIKE ?`;
+            cols.push(id + '%');
         } else {
-            query = `SELECT * FROM products WHERE name = ?`;
-            cols.push(name);
+            query = `SELECT * FROM products WHERE id = ?`;
+            cols.push(id);
         }
     }
 
     query = query + ' ORDER BY id DESC';
     
     const queryReq = {
-        string: name,
+        string: id,
         similar,
     }
     dbManagement.getProducts(query, cols, queryReq, db, res);
