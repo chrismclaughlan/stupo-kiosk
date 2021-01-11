@@ -17,16 +17,16 @@ class DBUserAdd extends DBUserModify {
   render() {
     const properties = {
       username: {
-        disable: false, placeholder: 'Brugernvan'
+        disable: false, placeholder: 'Username'
       },
       password: {
-        disable: false, placeholder: 'Adgangskode'
+        disable: false, placeholder: 'Password'
       },
       privileges: {
-        disable: false, placeholder: 'Tiladelser'
+        disable: false, placeholder: 'Privileges'
       },
     }
-    return super.render('Tilføj Bruger', properties);
+    return super.render('Add User', properties);
   }
 }
 

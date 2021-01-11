@@ -39,9 +39,9 @@ class LoginForm extends React.Component{
     resetForm(error) {
         let errorMsg;
         if (error) {
-            errorMsg = {message: 'En fejl opstod', variant: 'danger'};
+            errorMsg = {message: 'An error occured', variant: 'danger'};
         } else {
-            errorMsg = {message: 'Forkert login oplysninger', variant: 'warning'};
+            errorMsg = {message: 'Incorrect login information', variant: 'warning'};
         }
 
         this.setState({
@@ -110,7 +110,7 @@ class LoginForm extends React.Component{
             this.resetForm(true);
             this.setState({
                 error: {
-                    message: `Fejl forsøger at logge ind: ${err}`, 
+                    message: `Error trying to login: ${err}`, 
                     variant: 'danger'
               }
             })
@@ -139,12 +139,12 @@ class LoginForm extends React.Component{
                                     isInvalid={this.state.usernameIncorrect}
                                     type="text"
                                     className="mb-2 mr-sm-2"
-                                    placeholder="Brugernavn"
+                                    placeholder="Username"
                                     value={this.state.username}
                                     onChange={(val) => this.setInputValue('username', val.target.value)}
                                 />
                                 <Form.Control.Feedback type="invalid" tooltip={true}>
-                                    Brugernavn ikke fundet
+                                    Username not found
                                 </Form.Control.Feedback>
 
                                 <FormControl 
@@ -152,18 +152,18 @@ class LoginForm extends React.Component{
                                     isInvalid={this.state.passwordIncorrect}
                                     type="password"
                                     className="mb-2 mr-sm-2"
-                                    placeholder="Adgangskode"
+                                    placeholder="Password"
                                     value={this.state.password}
                                     onChange={(val) => this.setInputValue('password', val.target.value)}
                                 />
                                 <Form.Control.Feedback type="invalid" tooltip={true}>
-                                    Kodeord Forkert
+                                    Invalid password
                                 </Form.Control.Feedback>
                                 <Button
                                 type="submit" 
                                 className="AppButton mb-2 mr-sm-2"
                             >
-                                Log ind
+                                Log in
                             </Button>
                         </Form.Row>
                         </Container>

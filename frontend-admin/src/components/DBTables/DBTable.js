@@ -129,7 +129,7 @@ class DBTable extends React.Component{
       if (result && result.success) {
         this.setState({
           error: {
-            message: `Sletning fuldført ${nameToDelete}`, 
+            message: `Successfully deleted ${nameToDelete}`, 
             variant: 'success',
           },
           disableButton: false,
@@ -140,7 +140,7 @@ class DBTable extends React.Component{
       {
         this.setState({
           error: {
-            message: `Sletning fejlede ${nameToDelete}`, 
+            message: `Error deleting ${nameToDelete}`, 
             variant: 'warning',
           },
           disableButton: false,
@@ -151,7 +151,7 @@ class DBTable extends React.Component{
       console.log(`Error trying to fetch '${url}': '${err}'`)
       this.setState({
           error: {
-              message: `Sletning fejlede ${nameToDelete}: ${err}`, 
+              message: `Error deleting ${nameToDelete}: ${err}`, 
               variant: 'danger',
         },
         disableButton: false,
@@ -187,9 +187,9 @@ class DBTable extends React.Component{
       } else {          
         let reason;
         if (query && query.string) {
-          reason = `Kunne ikke finde ${query.string}  i databasen`;
+          reason = `Could not find ${query.string} in the database`;
         } else {
-          reason = 'Kunne ikke finde nogen match i databasen';
+          reason = 'Could not find any matches in the database';
         }
 
         this.setState({
@@ -197,7 +197,7 @@ class DBTable extends React.Component{
           disableButton: false,
           query: null, 
           error: {
-            message: `Kø Ikke Fuldført. ${reason}`, 
+            message: `Could not complete query. ${reason}`, 
             variant: "warning",
           },
         });
@@ -255,7 +255,7 @@ class DBTable extends React.Component{
     
     return (
       <Form.Text muted>
-        <p>Fandt {this.state.entries.length} {(this.state.query.similar) ? 'ligende' : null} søgnings resultater for: {this.state.query.string}</p>
+        <p>Found {this.state.entries.length} {(this.state.query.similar) ? 'similar' : null} results for: {this.state.query.string}</p>
       </Form.Text>
     )
   }
@@ -291,14 +291,14 @@ class DBTable extends React.Component{
                       className="AppButton mb-2 mr-sm-2"
                       onClick={!this.state.buttonDisabled ? (e) => this.searchE(e, false) : null}
                       >
-                        Søg
+                        Search
                     </Button>
                     <Button
                       type="submit" 
                       className="AppButton mb-2 mr-sm-2"
                       onClick={!this.state.buttonDisabled ? (e) => this.searchE(e, true) : null}
                       >
-                        Søg Ligende
+                        Search Similar
                     </Button>
                     <Button
                       type="submit" 
@@ -336,7 +336,7 @@ class DBTable extends React.Component{
               {
                 (UserStore.privileges > 0 && enableDelete) ?
                 <th key={-1}>
-                  Slet
+                  Delete
                 </th>
                 :
                 null
@@ -435,7 +435,7 @@ class DBTable extends React.Component{
       if (UserStore.privileges > 0 && enableDelete) {
         button = (
           <td className="hidden-button" >
-            <Button onClick={(e) => this.deleteByName(e)} className="AppButton" size="sm">Slet</Button>
+            <Button onClick={(e) => this.deleteByName(e)} className="AppButton" size="sm">Delete</Button>
           </td>
         )
       } else {
@@ -551,17 +551,17 @@ class DBTable extends React.Component{
 
           <Modal show={(this.state.nameToDelete !== '')} onHide={() => this.closeConfirmDelete()}>
             <Modal.Header closeButton>
-              <Modal.Title>Slet Del</Modal.Title>
+              <Modal.Title>Delete Product</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              Er du sikker på du gerne vil slette <i>{this.state.nameToDelete}</i>?
+              Are you sure you want to delete <i>{this.state.nameToDelete}</i>?
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => this.closeConfirmDelete()}>
-                Afbryd
+                Cancel
               </Button>
               <Button variant="primary" onClick={() => this.confirmDelete()}>
-                Bekræft
+                Confirm
               </Button>
             </Modal.Footer>
           </Modal>
@@ -575,7 +575,7 @@ class DBTable extends React.Component{
           >
             <Modal.Header closeButton>
               <Modal.Title id="contained-modal-title-vcenter">
-                Hjælp
+                Help
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -587,7 +587,7 @@ class DBTable extends React.Component{
           </Modal>
 
           <Button className="HelpButton" onClick={() => this.setState({showHelp: true})}>
-            Hjælp
+            Help
           </Button>
 
           <AlertPopup error={this.state.error}/>

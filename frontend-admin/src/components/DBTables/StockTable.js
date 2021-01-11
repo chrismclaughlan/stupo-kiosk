@@ -77,7 +77,7 @@ class StockTable extends DBTable{
   render() {    
     return (
       <div ref={this.state.insideRef} className="StockTable">
-        {this.renderSearchBar('Søg')}
+        {this.renderSearchBar('Search Product ID\'s')}
         {this.renderEdit()}
         {this.renderTable()}
       </div>

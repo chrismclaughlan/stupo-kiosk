@@ -13,9 +13,9 @@ class Header extends React.Component{
             <Navbar.Brand href="/">
               <img
                 alt=""
-                src="/lbt_200x60.png"
-                width="160"
-                height="50"
+                src="/logo_64x64.png"
+                width="64"
+                height="64"
                 className="d-inline-block align-top"
               />
             </Navbar.Brand>
@@ -23,7 +23,7 @@ class Header extends React.Component{
             &nbsp;&nbsp;&nbsp;&nbsp; {/* Temp fix for spacing */}
 
                 <Nav className="mr-auto">
-                  <Navbar.Brand href="/">Hejm</Navbar.Brand>
+                  <Navbar.Brand href="/">Home</Navbar.Brand>
                   <Nav.Link href="/mylogs">Logs</Nav.Link>
                   {
                     UserStore.privileges > 0 ?
@@ -34,7 +34,7 @@ class Header extends React.Component{
               </Nav>            
             
                 <Navbar.Text>
-                  Logged på som: <a href="/account">{UserStore.username}</a>
+                  Logged in as: <a href="/account">{UserStore.username}</a>
                 </Navbar.Text>
 
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -47,7 +47,7 @@ class Header extends React.Component{
                 >
                   <Dropdown.Item href="/account">Konto</Dropdown.Item>
                   <Dropdown.Divider />
-                  <Dropdown.Item as="button"  onClick={this.props.onLogout}>Log ud</Dropdown.Item>
+                  <Dropdown.Item as="button"  onClick={this.props.onLogout}>Logout</Dropdown.Item>
                 </DropdownButton>
 
           </Navbar>

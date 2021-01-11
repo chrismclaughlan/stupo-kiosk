@@ -81,7 +81,7 @@ class DBUserModify extends DBModify{
       }
       this.setState({
         error: {
-          message: `En fejl opstod: ${err}`, 
+          message: `An error occured: ${err}`, 
           variant: 'danger'
         },
         buttonDisabled: false,
@@ -158,7 +158,7 @@ class DBUserModify extends DBModify{
                     className="AppButton"
                     onClick={!this.state.buttonDisabled ? (e) => this.doExecute(e) : null}
                   >
-                    Bekræft
+                    Confirm
                   </Button>
                 </Col>
 

@@ -27,12 +27,12 @@ class DBUserChangePassword extends DBUserModify {
               validated={isValidated} 
               onSubmit={!this.state.buttonDisabled ? (e) => this.doExecute(e) : null}
             >
-              <Form.Label className="FormLabel">Ændre Adgangskode</Form.Label>
+              <Form.Label className="FormLabel">Change Password</Form.Label>
               <Form.Row>
                 <Col xs="auto" lg="2">
                   <Form.Control 
                     type="password"
-                    placeholder="Nyt Kodeord"
+                    placeholder="New Password"
                     value={(this.state.password)}
                     onChange={(e) => this.setProperty('password', e)}
                     ref={elem => (this.textInput = elem)}
@@ -45,7 +45,7 @@ class DBUserChangePassword extends DBUserModify {
                     className="AppButton"
                     onClick={!buttonDisabled ? (e) => this.doExecute(e) : null}
                   >
-                    Bekræft
+                    Confirm
                   </Button>
                 </Col>
 

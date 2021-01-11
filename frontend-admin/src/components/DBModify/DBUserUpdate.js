@@ -28,16 +28,16 @@ class DBUserUpdate extends DBUserModify {
   render() {
     const properties = {
       username: {
-        disable: true, placeholder: 'Brugernavn'
+        disable: true, placeholder: 'Username'
       },
       password: {
-        disable: false, placeholder: 'Nyt Kodeord'
+        disable: false, placeholder: 'New Password'
       },
       privileges: {
-        disable: false, placeholder: 'Tiladelser'
+        disable: false, placeholder: 'Privileges'
       },
     }
-    return super.render('Opdater Bruger', properties);
+    return super.render('Update User', properties);
   }
 }
 

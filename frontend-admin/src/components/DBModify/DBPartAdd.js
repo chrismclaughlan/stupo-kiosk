@@ -28,7 +28,7 @@ class DBPartAdd extends DBPartModify {
         disable: false, placeholder: 'Price'
       },
     }
-    return super.render('Tilføj Del', properties);
+    return super.render('Add Product', properties);
   }
 }
 

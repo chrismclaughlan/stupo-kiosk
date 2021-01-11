@@ -48,7 +48,7 @@ class LogsTable extends DBTable{
   render() {    
     return (
       <div className="LogsTable">
-        {this.renderSearchBar("Søg efter bruger")}
+        {this.renderSearchBar("Search Usernames")}
         {this.renderTable()}
       </div>
     );

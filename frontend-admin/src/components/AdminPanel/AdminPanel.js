@@ -7,7 +7,7 @@ import AlertPopup from '../AlertPopup'
 import UserStore from '../../store/UserStore'
 import {observer} from 'mobx-react';
 
-const tabs = ['Brugere', 'Dele', 'Logs'];
+const tabs = ['Users', 'Products', 'Logs'];
 
 class AdminPanel extends React.Component{
 
@@ -44,10 +44,10 @@ class AdminPanel extends React.Component{
     }
     switch(this.state.tab)
     {
-        case "Brugere":
+        case "Users":
             content = <AdminPanelUsers />
             break;
-        case "Dele":
+        case "Products":
             content = <AdminPanelParts />
             break;
         case "Logs":
