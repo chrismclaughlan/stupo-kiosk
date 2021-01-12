@@ -23,7 +23,7 @@ class Header extends React.Component{
             &nbsp;&nbsp;&nbsp;&nbsp; {/* Temp fix for spacing */}
 
                 <Nav className="mr-auto">
-                  <Navbar.Brand href="/">Home</Navbar.Brand>
+                  <Navbar.Brand href="/dashboard">Dashboard</Navbar.Brand>
                   <Nav.Link href="/mylogs">Logs</Nav.Link>
                   {
                     UserStore.privileges > 0 ?

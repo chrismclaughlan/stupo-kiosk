@@ -8,6 +8,8 @@ const utils = require('../../Utils');
 const MAX_SEARCH_LENGTH = 255;
 const DEFAULT_ENTRIES_PER_PAGE = 100;
 
+const date = new Date();
+
 class DBTable extends React.Component{
   constructor(props) {
     super(props);
@@ -61,6 +63,9 @@ class DBTable extends React.Component{
       showHelp: false,
 
       insideRef: React.createRef(),
+
+      // Show last time table was updated
+      lastUpdated: null,
     }
 
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -178,6 +183,7 @@ class DBTable extends React.Component{
 
       if (result.successful) {
         this.setState({
+          lastUpdated: date.toLocaleTimeString(),
           isLoading: false, 
           disableButton: false,
           entries: result.results,
@@ -538,6 +544,10 @@ class DBTable extends React.Component{
                   {this.renderTableEntries()}
               </tbody>
           </Table>
+
+          {this.state.lastUpdated && 
+            <p className="text-muted">Last updated {this.state.lastUpdated}</p>
+          }
 
           <div className="pagination">
             <Pagination>

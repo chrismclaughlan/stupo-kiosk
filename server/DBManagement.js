@@ -136,7 +136,7 @@ const logDB = (db, userID, values) => {
 
     cols.push(values.action);
     cols.push(values.id);
-    values.name ? cols.push(values.name) : cols.push(null);
+    values.name ? cols.push(values.name.toLowerCase()) : cols.push(null);
     values.quantity ? cols.push(values.quantity) : cols.push(null);
     values.price ? cols.push(values.price) : cols.push(null);
 

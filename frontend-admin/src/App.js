@@ -16,6 +16,10 @@ import AdminPanel from './components/AdminPanel/AdminPanel'
 
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
+import {Container} from 'react-bootstrap'
+import Dashboard from './components/Dashboard'
+import Cashier from './components/Cashier'
+
 const utils = require('./Utils');
 
 class App extends React.Component{
@@ -114,15 +118,13 @@ class App extends React.Component{
     if (!UserStore.isLoggedIn) {
       return (
         <div className="app">
-          <div className="container">
-            
+          <Container>
             <AlertPopup error={connectionError} />
 
             <div className="center-screen">
               <LoginForm />
             </div>
-
-          </div>
+          </Container>
         </div>
       )
     }
@@ -137,22 +139,38 @@ class App extends React.Component{
           <Switch>
 
             <Route exact path="/">
-              <div className="container">
+              <p>Page not constructed yet</p>
+            </Route>
+
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
+
+            <Route path="/cashier">
+              <Cashier />
+            </Route>
+
+            <Route path="/cashier-history">
+              <p>Page not constructed yet</p>
+            </Route>
+
+            <Route path="/manage-stock">
+              <Container>
                 <StockTable enableDelete columnsIgnore={[]/*["id"]*/} columnNames={["Id", "Name", "Quantity", "Price"]}/>
-              </div>
+              </Container>
             </Route>
 
-            <Route exact path="/mylogs">
-              <div className="container">
+            <Route path="/mylogs">
+              <Container>
                 <MyLogsTable columnsIgnore={["id", "user_id"]}  columnNames={["Username", "Action", "Product-Id", "Product-Name", "Product-Quantity", "Product-Price", "Date"]}/>
-              </div>
+              </Container>
             </Route>
 
-            <Route exact path="/account">
+            <Route path="/account">
               <Account />
             </Route>
             
-            <Route exact path="/admin-panel">
+            <Route path="/admin-panel">
               <AdminPanel />
             </Route>
 

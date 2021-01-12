@@ -34,6 +34,7 @@ const db = mysql.createConnection({
     password: process.env.REACT_APP_DB_PASSWORD,
     database: process.env.REACT_APP_DB_DATABASE,
     dateStrings: true,
+    multipleStatements: true
 });
 
 db.connect(function(err) {

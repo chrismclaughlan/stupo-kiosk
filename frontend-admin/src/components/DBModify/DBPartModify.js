@@ -121,6 +121,8 @@ class DBPartModify extends DBModify{
         buttonDisabled: false,
       })
     })
+
+    this.textInput.focus();
   }
 
   componentDidMount() {
@@ -160,6 +162,7 @@ class DBPartModify extends DBModify{
                       placeholder={properties.id.placeholder}
                       value={this.state.partId}
                       onChange={(e) => this.setProperty('partId', e)}
+                      ref={elem => (this.textInput = elem)}
                     />
                 </Col>
                 }
@@ -182,7 +185,6 @@ class DBPartModify extends DBModify{
                       placeholder={properties.quantityAdd.placeholder}
                       value={(this.state.partQuantityAdd)}
                       onChange={(e) => this.setProperty('partQuantityAdd', e)}
-                      ref={elem => (this.textInput = elem)}
                     />
                   </Col>
                   }
