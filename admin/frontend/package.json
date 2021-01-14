@@ -7,16 +7,16 @@
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chrismclaughlan/stupo-store.git"
+    "url": "git+https://github.com/chrismclaughlan/stupo-kiosk.git"
   },
   "author": "Chris M",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/chrismclaughlan/stupo-store/issues"
+    "url": "https://github.com/chrismclaughlan/stupo-kiosk/issues"
   },
   "dependencies": {
     "bootstrap": "^4.5.3",

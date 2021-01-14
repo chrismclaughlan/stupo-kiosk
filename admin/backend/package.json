@@ -1,5 +1,5 @@
 {
-  "name": "admin",
+  "name": "admin-backend",
   "version": "1.0.0",
   "description": "",
   "main": "admin.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chrismclaughlan/stupo-store.git"
+    "url": "git+https://github.com/chrismclaughlan/stupo-kiosk.git"
   },
   "author": "Chris M",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/chrismclaughlan/stupo-store/issues"
+    "url": "https://github.com/chrismclaughlan/stupo-kiosk/issues"
   },
-  "homepage": "https://github.com/chrismclaughlan/stupo-store#readme",
+  "homepage": "https://github.com/chrismclaughlan/stupo-kiosk#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "dot": "^1.1.3",

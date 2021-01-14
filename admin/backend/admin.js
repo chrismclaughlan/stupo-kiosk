@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const express = require('express');
 const app = express();
-// const path = require('path');
+const path = require('path');
 const mysql = require('mysql');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
@@ -23,7 +23,7 @@ if (result.error) {
     throw result.error;
 }
 
-// app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.use(express.json());
 
 const auth = require('./Auth')
@@ -180,9 +180,9 @@ app.get('/logs', auth.userAuthorised, function(req, res) {
     dbManagement.getLogs(query, cols, queryReq, db, res);
 });
 
-// app.get('/*', function(req, res) {
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 const server = app.listen(PORT, () => {
     utils.printMessage(CONSOLE_YELLOW, ' SERVER ', 'READY', `Listening on http://localhost:${PORT}`)
