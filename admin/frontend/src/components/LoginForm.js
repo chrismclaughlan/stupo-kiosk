@@ -23,6 +23,14 @@ class LoginForm extends React.Component{
         }
     }
 
+    componentDidMount() {
+        document.body.className = "body-textured-background";
+    }
+
+    componentWillUnmount() {
+        document.body.className = null;
+    }
+
     setInputValue(property, val) {
         if (val.length > utils.MAX_CREDENTIALS_LEN[property]) {
             return;
