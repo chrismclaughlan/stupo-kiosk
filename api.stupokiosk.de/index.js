@@ -1,8 +1,9 @@
 const dotenv = require('dotenv');
 const express = require('express');
 const app = express();
-const path = require('path');
+// const path = require('path');
 const mysql = require('mysql');
+const cors = require('cors');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const SessionRouter = require('./SessionRouter');
@@ -10,6 +11,10 @@ const ProductsRouter = require('./ProductsRouter');
 const UsersRouter = require('./UsersRouter');
 const utils = require('./Utils');
 const dbManagement = require('./DBManagement');
+
+
+const PORT = 5000;
+
 
 const {CONSOLE_RED, CONSOLE_YELLOW, CONSOLE_GREEN} = utils;
 
@@ -19,7 +24,11 @@ if (result.error) {
     throw result.error;
 }
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(cors({
+    origin: 'http://localhost:5001',
+    optionsSuccessStatus: 200
+}));
+// app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json());
 
 const auth = require('./Auth')
@@ -58,7 +67,9 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: YEAR_IN_MS,
-        httpOnly: false
+        httpOnly: false,
+        path: '/',
+        domain: 'stupokiosk.de'//'api'
     }
 }));
 
@@ -66,7 +77,7 @@ new SessionRouter(app, db);
 new ProductsRouter(app, db);
 new UsersRouter(app, db);
 
-app.get('/api/users', auth.userAuthorised, function(req, res) {
+app.get('/users', auth.userAuthorised, function(req, res) {
     let query, cols = [];
 
     let {username, similar, privileges} = req.query;
@@ -110,7 +121,7 @@ app.get('/api/users', auth.userAuthorised, function(req, res) {
     dbManagement.getUsers(query, cols, queryReq, db, res);
 })
 
-app.get('/api/products', auth.userAuthenticated, function(req, res) {
+app.get('/products', auth.userAuthenticated, function(req, res) {
     let query, cols = [];
 
     let {id, similar} = req.query;
@@ -137,13 +148,13 @@ app.get('/api/products', auth.userAuthenticated, function(req, res) {
     dbManagement.getProducts(query, cols, queryReq, db, res);
 });
 
-app.get('/api/mylogs', auth.userAuthenticated, function(req, res) {
+app.get('/mylogs', auth.userAuthenticated, function(req, res) {
     const query = 'SELECT * FROM products_logs WHERE user_id = ? ORDER BY date DESC';
     const cols = [req.session.userID];
     dbManagement.getLogs(query, cols, null, db, res);
 })
 
-app.get('/api/logs', auth.userAuthorised, function(req, res) {
+app.get('/logs', auth.userAuthorised, function(req, res) {
     let query, cols = [];
     
     let {username, similar} = req.query;  // part_name?
@@ -174,13 +185,12 @@ app.get('/api/logs', auth.userAuthorised, function(req, res) {
     dbManagement.getLogs(query, cols, queryReq, db, res);
 });
 
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// app.get('/*', function(req, res) {
+//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
-const port = 4016;
-const server = app.listen(port, () => {
-    utils.printMessage(CONSOLE_YELLOW, ' SERVER ', 'READY', `Listening on http://localhost:${port}`)
+const server = app.listen(PORT, () => {
+    utils.printMessage(CONSOLE_YELLOW, ' SERVER ', 'READY', `Listening on http://localhost:${PORT}`)
 });
 
 process.on('SIGINT', () => {

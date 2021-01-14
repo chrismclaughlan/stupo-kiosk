@@ -15,7 +15,7 @@ class UsersRouter {
     }
 
     changeMyPassword(app, db) {
-        app.post('/api/users/change-my-password', auth.userAuthenticated, (req, res) => {
+        app.post('/users/change-my-password', auth.userAuthenticated, (req, res) => {
             let query, cols = [];
 
             /* Validate and retreive POST data */
@@ -42,7 +42,7 @@ class UsersRouter {
     }
 
     update(app, db) {
-        app.post('/api/users/update', auth.userAuthorised, (req, res) => {
+        app.post('/users/update', auth.userAuthorised, (req, res) => {
             let query, cols = [];
 
             /* Validate and retreive POST data */
@@ -99,7 +99,7 @@ class UsersRouter {
     }
 
     add(app, db) {
-        app.post('/api/users/add', auth.userAuthorised, (req, res) => {
+        app.post('/users/add', auth.userAuthorised, (req, res) => {
             let query, cols = [];
 
             /* Validate and retreive POST data */
@@ -136,7 +136,7 @@ class UsersRouter {
     }
 
     remove(app, db) {
-        app.post('/api/users/remove', auth.userAuthorised, (req, res) => {
+        app.post('/users/remove', auth.userAuthorised, (req, res) => {
             let query, cols = [];
 
             /* Validate and retreive POST data */

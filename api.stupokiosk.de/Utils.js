@@ -21,12 +21,17 @@ const printMessage = (colour, area, type, content, action, query, cols) => {
 const validateRequest = (req, properties, res) => {
     let propertyNotDefined = '';
 
-    properties.forEach(property => {
-        if (! req[property] || req[property].length === 0) {
-            propertyNotDefined = property;
-            return false;
-        }
-    })
+    if (req) {
+        properties.forEach(property => {
+            if (! req[property] || req[property].length === 0) {
+                propertyNotDefined = property;
+                return false;
+            }
+        })
+    } else {
+        propertyNotDefined = 'body';
+    }
+
 
     if (propertyNotDefined) {
         res.json({

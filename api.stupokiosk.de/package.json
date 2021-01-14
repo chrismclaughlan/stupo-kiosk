@@ -1,5 +1,5 @@
 {
-  "name": "stupo-kiosk",
+  "name": "api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/chrismclaughlan/stupo-store#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
     "dot": "^1.1.3",
     "env": "0.0.2",
     "express": "^4.17.1",
