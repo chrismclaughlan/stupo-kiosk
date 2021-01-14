@@ -58,7 +58,6 @@ class LoginForm extends React.Component{
     async doLogin(e) {
         e.preventDefault()
         console.log(process.env.NODE_ENV)
-        console.log(API)
 
         if (!this.state.username) {
             return;
