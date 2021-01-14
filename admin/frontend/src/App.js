@@ -22,6 +22,9 @@ import Cashier from './components/Cashier'
 
 const utils = require('./Utils');
 
+const API_ISLOGGEDIN = '/api/isLoggedIn';
+const API_LOGOUT = '/api/logout';
+
 class App extends React.Component{
 
   constructor(props) {
@@ -36,7 +39,7 @@ class App extends React.Component{
   }
 
   async componentDidMount() {
-    fetch('/api/isLoggedIn', {
+    fetch(API_ISLOGGEDIN, {
       method: 'post',
       headers: {
         'Accept': 'application/json',
@@ -77,7 +80,7 @@ class App extends React.Component{
   }
 
   async doLogout() {
-    fetch('/api/logout', {
+    fetch(API_LOGOUT, {
       method: 'post',
       headers: {
         'Accept': 'application/json',
