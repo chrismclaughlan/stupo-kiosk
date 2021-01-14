@@ -53,7 +53,6 @@ class SessionRouter {
                         if (verified) {
                             req.session.userID = data[0].id;
                             req.session.privileges = data[0].privileges;
-                            req.session.save();
 
                             if (utils.PRINT_DEBUG_SUCCESS) {
                                 utils.printMessage(CONSOLE_GREEN, 'SESSION', 'SUCCESS', `Username: ${username}`, 'logged in');
@@ -94,7 +93,6 @@ class SessionRouter {
             }
 
             req.session.destroy();
-            req.session.save();
 
             res.json({
                 success: true

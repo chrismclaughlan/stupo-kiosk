@@ -2,9 +2,7 @@ import {Form, Col, Button} from 'react-bootstrap'
 import DBUserModify from './DBUserModify'
 import AlertPopup from '../AlertPopup';
 
-const API = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL : '';
-
-const API_QUERY_USERS = API + '/users';
+const API_QUERY_USERS = '/users';
 
 class DBUserChangePassword extends DBUserModify { 
 

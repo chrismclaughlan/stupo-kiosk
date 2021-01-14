@@ -1,8 +1,6 @@
 import DBUserModify from './DBUserModify'
 
-const API = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL : '';
-
-const API_QUERY_USERS = API + '/users';
+const API_QUERY_USERS = '/users';
 
 class DBUserUpdate extends DBUserModify { 
 

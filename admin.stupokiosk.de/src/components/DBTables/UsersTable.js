@@ -3,9 +3,7 @@ import DBTable from './DBTable'
 import DBUserUpdate from '../DBModify/DBUserUpdate'
 const utils = require('../../Utils');
 
-const API = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL : '';
-
-const API_QUERY_ALL = API + '/users';
+const API_QUERY_ALL = '/users';
 const QUERY_STRING = 'username=';
 const QUERY_SIMILAR = 'similar=';
 

@@ -4,10 +4,7 @@ import {Form, Button, FormControl, Container} from 'react-bootstrap'
 import AlertPopup from './AlertPopup'
 const utils = require('../Utils');
 
-
-const API = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL : '';
-
-const API_LOGIN = API + '/login';
+const API_LOGIN = '/login';
 
 class LoginForm extends React.Component{
 

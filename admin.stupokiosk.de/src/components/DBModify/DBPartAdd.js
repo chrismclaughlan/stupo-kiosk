@@ -1,8 +1,6 @@
 import DBPartModify from './DBPartModify'
 
-const API = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL : '';
-
-const API_QUERY_PRODUCTS = API + '/products';
+const API_QUERY_PRODUCTS = '/products';
 
 class DBPartAdd extends DBPartModify { 
 

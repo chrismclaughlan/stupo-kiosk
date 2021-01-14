@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 // const path = require('path');
 const mysql = require('mysql');
-const cors = require('cors');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const SessionRouter = require('./SessionRouter');
@@ -24,10 +23,6 @@ if (result.error) {
     throw result.error;
 }
 
-app.use(cors({
-    origin: 'http://localhost:5001',
-    optionsSuccessStatus: 200
-}));
 // app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json());
 

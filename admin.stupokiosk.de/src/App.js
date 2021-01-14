@@ -22,8 +22,6 @@ import Cashier from './components/Cashier'
 
 const utils = require('./Utils');
 
-const API = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL : '';
-
 class App extends React.Component{
 
   constructor(props) {
@@ -38,7 +36,7 @@ class App extends React.Component{
   }
 
   async componentDidMount() {
-    fetch(`${API}/isLoggedIn`, {
+    fetch('/isLoggedIn', {
       method: 'post',
       headers: {
         'Accept': 'application/json',
@@ -79,7 +77,7 @@ class App extends React.Component{
   }
 
   async doLogout() {
-    fetch(`${API}/logout`, {
+    fetch('/logout', {
       method: 'post',
       headers: {
         'Accept': 'application/json',

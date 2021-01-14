@@ -2,10 +2,8 @@ import React from 'react';
 import DBTable from './DBTable'
 const utils = require('../../Utils');
 
-const API = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL : '';
-
-const API_LOGS_REMOVE   = API + '/logs/remove';
-const API_QUERY_ALL     = API + '/logs';
+const API_LOGS_REMOVE   = '/logs/remove';
+const API_QUERY_ALL     = '/logs';
 const QUERY_STRING      = 'username=';
 const QUERY_SIMILAR     = 'similar=';
 

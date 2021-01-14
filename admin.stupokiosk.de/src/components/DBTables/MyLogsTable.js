@@ -2,9 +2,7 @@ import React from 'react';
 import DBTable from './DBTable'
 const utils = require('../../Utils');
 
-const API = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_URL : '';
-
-const API_QUERY_ALL = API + '/mylogs';
+const API_QUERY_ALL = '/mylogs';
 
 class MyLogsTable extends DBTable{
 
