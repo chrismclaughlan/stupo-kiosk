@@ -23,7 +23,7 @@ if (result.error) {
     throw result.error;
 }
 
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json());
 
 const auth = require('./Auth')
@@ -63,8 +63,6 @@ app.use(session({
     cookie: {
         maxAge: YEAR_IN_MS,
         httpOnly: false,
-        path: '/',
-        domain: 'stupokiosk.de'//'api'
     }
 }));
 
@@ -72,7 +70,7 @@ new SessionRouter(app, db);
 new ProductsRouter(app, db);
 new UsersRouter(app, db);
 
-app.get('/users', auth.userAuthorised, function(req, res) {
+app.get('/api/users', auth.userAuthorised, function(req, res) {
     let query, cols = [];
 
     let {username, similar, privileges} = req.query;
@@ -116,7 +114,7 @@ app.get('/users', auth.userAuthorised, function(req, res) {
     dbManagement.getUsers(query, cols, queryReq, db, res);
 })
 
-app.get('/products', auth.userAuthenticated, function(req, res) {
+app.get('/api/products', auth.userAuthenticated, function(req, res) {
     let query, cols = [];
 
     let {id, similar} = req.query;
@@ -143,13 +141,13 @@ app.get('/products', auth.userAuthenticated, function(req, res) {
     dbManagement.getProducts(query, cols, queryReq, db, res);
 });
 
-app.get('/mylogs', auth.userAuthenticated, function(req, res) {
+app.get('/api/mylogs', auth.userAuthenticated, function(req, res) {
     const query = 'SELECT * FROM products_logs WHERE user_id = ? ORDER BY date DESC';
     const cols = [req.session.userID];
     dbManagement.getLogs(query, cols, null, db, res);
 })
 
-app.get('/logs', auth.userAuthorised, function(req, res) {
+app.get('/api/logs', auth.userAuthorised, function(req, res) {
     let query, cols = [];
     
     let {username, similar} = req.query;  // part_name?

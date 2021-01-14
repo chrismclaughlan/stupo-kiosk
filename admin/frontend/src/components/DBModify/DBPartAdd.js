@@ -1,6 +1,6 @@
 import DBPartModify from './DBPartModify'
 
-const API_QUERY_PRODUCTS = '/products';
+const API_QUERY_PRODUCTS = '/api/products';
 
 class DBPartAdd extends DBPartModify { 
 

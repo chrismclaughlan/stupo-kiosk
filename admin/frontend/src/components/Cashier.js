@@ -6,7 +6,7 @@ import {useRef, useState, useEffect} from 'react'
 import AlertPopup from './AlertPopup'
 const utils = require('../Utils');
 
-const API_QUERY_PRODUCTS = '/products';
+const API_QUERY_PRODUCTS = '/api/products';
 
 const ESCAPE_KEY = 27;
 

@@ -1,6 +1,6 @@
 import DBUserModify from './DBUserModify'
 
-const API_QUERY_USERS = '/users';
+const API_QUERY_USERS = '/api/users';
 
 class DBUserUpdate extends DBUserModify { 
 

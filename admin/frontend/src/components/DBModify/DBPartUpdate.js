@@ -1,7 +1,7 @@
 import DBPartModify from './DBPartModify'
 import UserStore from '../../store/UserStore'
 
-const API_QUERY_PRODUCTS = '/products';
+const API_QUERY_PRODUCTS = '/api/products';
 
 class DBPartUpdate extends DBPartModify { 
 

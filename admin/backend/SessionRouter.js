@@ -14,7 +14,7 @@ class SessionRouter {
     }
 
     login(app, db) {
-        app.post('/login', (req, res) => {
+        app.post('/api/login', (req, res) => {
             let query, cols = [];
 
             /* Validate and retreive POST data */
@@ -86,7 +86,7 @@ class SessionRouter {
     }
 
     logout(app, db) {
-        app.post('/logout', auth.userAuthenticated, (req, res) => {
+        app.post('/api/logout', auth.userAuthenticated, (req, res) => {
             
             if (utils.PRINT_DEBUG_SUCCESS) {
                 utils.printMessage(CONSOLE_GREEN, 'SESSION', 'SUCCESS', `userID: ${req.session.userID}`, 'logged out');
@@ -102,7 +102,7 @@ class SessionRouter {
 
     isLoggedIn(app, db) {
 
-        app.post('/isLoggedIn', (req, res) => {
+        app.post('/api/isLoggedIn', (req, res) => {
             let query, cols = [];
 
             if (! auth.userIsUser(req)) {

@@ -2,7 +2,7 @@ import {Form, Col, Button} from 'react-bootstrap'
 import DBUserModify from './DBUserModify'
 import AlertPopup from '../AlertPopup';
 
-const API_QUERY_USERS = '/users';
+const API_QUERY_USERS = '/api/users';
 
 class DBUserChangePassword extends DBUserModify { 
 

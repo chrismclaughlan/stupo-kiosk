@@ -2,7 +2,7 @@ import React from 'react';
 import DBTable from './DBTable'
 const utils = require('../../Utils');
 
-const API_QUERY_ALL = '/mylogs';
+const API_QUERY_ALL = '/api/mylogs';
 
 class MyLogsTable extends DBTable{
 

@@ -11,7 +11,7 @@ class ProductsRouter {
     }
 
     update(app, db) {
-        app.post('/products/update', auth.userAuthenticated, (req, res) => {
+        app.post('/api/products/update', auth.userAuthenticated, (req, res) => {
             let globalQuery = "";
             let globalCols = [];
             const isAdmin = auth.userIsAdmin(req);
@@ -148,7 +148,7 @@ class ProductsRouter {
     }
 
     add(app, db) {
-        app.post('/products/add', auth.userAuthorised, (req, res) => {
+        app.post('/api/products/add', auth.userAuthorised, (req, res) => {
             let query, cols = [];
 
             /* Validate and retreive POST data */
@@ -186,7 +186,7 @@ class ProductsRouter {
     }
 
     remove(app, db) {
-        app.post('/products/remove', auth.userAuthorised, (req, res) => {
+        app.post('/api/products/remove', auth.userAuthorised, (req, res) => {
             let query, cols = [];
 
             /* Validate and retreive POST data */

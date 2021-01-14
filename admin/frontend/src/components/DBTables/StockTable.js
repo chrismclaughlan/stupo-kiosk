@@ -3,7 +3,7 @@ import DBTable from './DBTable'
 import DBPartUpdate from '../DBModify/DBPartUpdate';
 const utils = require('../../Utils');
 
-const API_QUERY_PRODUCTS = '/products';
+const API_QUERY_PRODUCTS = '/api/products';
 const QUERY_STRING = 'id=';
 const QUERY_SIMILAR = 'similar=';
 

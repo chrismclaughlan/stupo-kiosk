@@ -3,7 +3,7 @@ import DBTable from './DBTable'
 import DBUserUpdate from '../DBModify/DBUserUpdate'
 const utils = require('../../Utils');
 
-const API_QUERY_ALL = '/users';
+const API_QUERY_ALL = '/api/users';
 const QUERY_STRING = 'username=';
 const QUERY_SIMILAR = 'similar=';
 

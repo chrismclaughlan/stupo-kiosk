@@ -36,7 +36,7 @@ class App extends React.Component{
   }
 
   async componentDidMount() {
-    fetch('/isLoggedIn', {
+    fetch('/api/isLoggedIn', {
       method: 'post',
       headers: {
         'Accept': 'application/json',
@@ -77,7 +77,7 @@ class App extends React.Component{
   }
 
   async doLogout() {
-    fetch('/logout', {
+    fetch('/api/logout', {
       method: 'post',
       headers: {
         'Accept': 'application/json',

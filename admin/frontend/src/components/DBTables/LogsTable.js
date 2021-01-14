@@ -2,20 +2,19 @@ import React from 'react';
 import DBTable from './DBTable'
 const utils = require('../../Utils');
 
-const API_LOGS_REMOVE   = '/logs/remove';
-const API_QUERY_ALL     = '/logs';
+const API_QUERY_LOGS     = '/api/logs';
 const QUERY_STRING      = 'username=';
 const QUERY_SIMILAR     = 'similar=';
 
 class LogsTable extends DBTable{
 
   search() {
-    super.searchAPI(this.state.search, this.state.searchSimilar, API_QUERY_ALL, QUERY_STRING, QUERY_SIMILAR);
+    super.searchAPI(this.state.search, this.state.searchSimilar, API_QUERY_LOGS, QUERY_STRING, QUERY_SIMILAR);
   }
 
   searchLast() {
     const searchString = (this.state.searchLast.string !== undefined) ? this.state.searchLast.string : '';
-    this.searchAPI(searchString, this.state.searchLast.similar, API_QUERY_ALL, QUERY_STRING, QUERY_SIMILAR);
+    this.searchAPI(searchString, this.state.searchLast.similar, API_QUERY_LOGS, QUERY_STRING, QUERY_SIMILAR);
   }
 
   async callRemove() {
@@ -24,7 +23,7 @@ class LogsTable extends DBTable{
         {id: this.state.nameToDelete, },
       ]
     };
-    super.callRemove(API_LOGS_REMOVE, data);
+    super.callRemove(`${API_QUERY_LOGS}/remove`, data);
   }
 
   callRemove() {
