@@ -2,10 +2,10 @@ import Product from "./Product";
 
 export default function Category(props) {
   return (
-    <div className="py-1">
+    <div className="py-1 relative">
       <div
         className={
-          "bg-white shadow cursor-pointer z-10 mt-4 p-4 border-solid border-2 border-theme-1-100 hover:bg-theme-3-200 hover:shadow z-10 select-none category-item group" +
+          "category bg-white shadow cursor-pointer z-10 mt-4 p-4 border-solid border-2 border-theme-1-100 hover:bg-theme-3-200 hover:shadow z-10 select-none category-item group" +
           (props.isActive ? " bg-theme-3-200" : "")
         }
         onClick={() => props.onClick(props.index)}
@@ -18,11 +18,7 @@ export default function Category(props) {
         ></img>
         <div className="font-bold">{props.category.name}</div>
         <div className="font-thin">{props.category.description}</div>
-        <img
-          className={"float-right w-6 opacity-20 group-hover:opacity-70" + (props.isActive ? " opacity-40" : "")}
-          src="https://cdn0.iconfinder.com/data/icons/arrows-android-l-lollipop-icon-pack/24/expand2-256.png"
-          alt="Expand category"
-        ></img>
+        <i className={"arrow-down float-right w-4 h-4 opacity-20 group-hover:opacity-70" + (props.isActive ? " opacity-40" : "")}></i>
         <br></br>
       </div>
 

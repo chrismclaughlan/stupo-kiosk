@@ -4,26 +4,29 @@ import Search from "./Components/Search";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 
 import Catalogue from "./Components/Catalogue/Catalogue";
-import Checkout from "./Components/Checkout";
+import Checkout from "./Components/Checkout/Checkout";
 import OrderConfirmed from "./Components/OrderConfirmed";
 import PrivacyPolicy from "./Components/Legal/PrivacyPolicy";
 import TermsAndConditions from "./Components/Legal/TermsAndConditions";
 
-
 function App() {
   const [errorMsg, setErrorMsg] = useState("");
+  const [showHelp, setShowHelp] = useState(false);
 
   /* Search bar */
   const [searchString, setSearchString] = useState("");
   const [searchingFor, setSearchingFor] = useState(null);
 
   /* Basket */
-  const [basketList, setBasketList] = useState(JSON.parse(localStorage.getItem('basketList')) || []);
+  const [basketList, setBasketList] = useState(
+    JSON.parse(localStorage.getItem("basketList")) || []
+  );
   const [showBasket, setShowBasket] = useState(false);
+  const [animateBasket, setAnimateBasket] = useState(0);
 
   useEffect(() => {
-    localStorage.setItem('basketList', JSON.stringify(basketList))
-  }, [basketList])
+    localStorage.setItem("basketList", JSON.stringify(basketList));
+  }, [basketList]);
 
   /* Catalogue */
   const [isEndOfCategories, setIsEndOfCategories] = useState(false);
@@ -38,7 +41,7 @@ function App() {
     if (!searchingFor) return;
 
     fetchCategory();
-  }, [searchingFor])
+  }, [searchingFor]);
 
   async function fetchCategory() {
     if (searchingFor == null) return;
@@ -49,9 +52,9 @@ function App() {
         if (!Array.isArray(results) || results.length === 0) {
           return;
         }
-        
-        console.log(results)
-        setProductList(results);  // TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+
+        console.log(results);
+        setProductList(results); // TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
       })
       .catch((error) => console.log(`error: ${error}`));
 
@@ -111,6 +114,8 @@ function App() {
       product.quantityInBasket = 1;
       setBasketList((old) => [...old, product]);
     }
+
+    setAnimateBasket(1);
   }
 
   function getBasketTotalQuantity() {
@@ -143,7 +148,7 @@ function App() {
       setBasketList(newBasketList);
     }
   }
-  console.log(window.innerHeight, window.scrollY, document.body.offsetHeight)
+  console.log(window.innerHeight, window.scrollY, document.body.offsetHeight);
 
   function basketQuantityIncrease(p) {
     let index = basketProductGetIndex(p);
@@ -173,7 +178,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <header className="bg-white p-4 flex justify-between items-center border-b border-grey z-20">
+      <header className="bg-white p-4 flex justify-between items-center border-b border-grey z-50">
         <div
           className={
             "fixed top-0 left-1/2 rounded-b-lg border-b border-r border-l border-red-700 transition-all transform -translate-x-1/2 z-0 bg-red-200 hover:opacity-100" +
@@ -181,19 +186,23 @@ function App() {
           }
         >
           <div className="relative py-4 px-10">
-            Error: {errorMsg}
-            <img
+            {errorMsg}
+            <div
               onClick={() => setErrorMsg("")}
-              className="absolute top-0 right-0 w-9 cursor-pointer"
-              alt=""
-              src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-2/512/User_Interface-02-256.png"
-            ></img>
+              className="absolute top-0 -right-3 w-9 cursor-pointer"
+            >
+              x
+            </div>
           </div>
         </div>
 
         <div className="ml-0 sm:ml-6">
-          <Link onClick={() => setProductList([])} to="/" className="flex items-center space-x-4">
-            <div className="inline-block font-thin text-2xl">StuPo Kiosk</div>
+          <Link
+            onClick={() => setProductList([])}
+            to="/"
+            className="flex items-center space-x-4"
+          >
+            <div className="inline-block w-10 sm:w-auto font-thin text-2xl">StuPo Kiosk</div>
             <img
               className="inline-block mr-3 hidden sm:block rounded w-16"
               src="stupokiosk-tree.png"
@@ -223,19 +232,29 @@ function App() {
             className="flex items-center space-x-1 inline-block z-10 cursor-pointer"
           >
             <img
-              className="inline-block w-6"
+              className="inline-block w-6 basket-animation"
+              onAnimationEnd={() => setAnimateBasket(0)}
+              animate={animateBasket}
               alt=""
               src="https://cdn0.iconfinder.com/data/icons/elasto-online-store/26/00-ELASTOFONT-STORE-READY_bag-256.png"
             ></img>
-            <div className="inline-block">{getBasketTotalQuantity()}</div>
+            <div className="inline-block px-0">{getBasketTotalQuantity()}</div>
           </div>
 
-          <div className="inline-block z-10">
+          <div className="relative inline-block z-10">
             <img
-              className="w-6"
+              onClick={() => setShowHelp(!showHelp)}
+              className="w-6 cursor-pointer"
               alt=""
               src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/help-256.png"
             ></img>
+
+            <div className={"absolute bg-white right-0 top-full w-52 my-1 shadow border border-gray-300 transition-all" + (showHelp ? " opacity-100" : " transform translate-x-full opacity-0")}>
+              <Link to="/who-are-we" className="block py-2 px-4 hover:bg-gray-200">Who Are We?</Link>
+              <Link to="/contact-us" className="block py-2 px-4 hover:bg-gray-200">Contact Us</Link>
+              <Link to="/privacy-policy" className="block py-2 px-4 hover:bg-gray-200">Privacy Policy</Link>
+              <Link to="/terms-and-conditions" className="block py-2 px-4 hover:bg-gray-200">Terms and Conditions</Link>
+            </div>
           </div>
 
           <div
@@ -262,12 +281,12 @@ function App() {
                       <div key={i} className="w-full px-10 py-2 border-b">
                         <div className="relative text-lg">
                           <div>{product.name}</div>
-                          <img
+                          <div
                             onClick={() => basketRemove(product)}
-                            className="absolute -right-4 top-0 w-9 cursor-pointer"
-                            alt=""
-                            src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-2/512/User_Interface-02-256.png"
-                          ></img>
+                            className="absolute -right-7 -top-0.5 w-9 cursor-pointer font-light"
+                          >
+                            x
+                          </div>
                         </div>
                         <div className="flex justify-between text-lg font-light pt-2">
                           <div className="flex space-x-4">

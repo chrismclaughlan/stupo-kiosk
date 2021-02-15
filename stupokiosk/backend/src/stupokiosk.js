@@ -47,13 +47,10 @@ discordClient.login(process.env.REACT_APP_DISCORD_BOT_TOKEN);
  */
 const discordSendMessage = (message, channelId = "809568968461123618") => {
   const channel = discordClient.channels.cache.get(channelId);
-  if (channel) {
-    channel.send(message + "");
+  if (channel && channel.send(message + "").catch(error => console.error(`discordClient Error: ${error}`))) {
     return true;
   } else {
-    console.error(
-      `Discord bot Could not send message to channelid: ${channelId}`
-    );
+    console.error(`Discord bot Could not send message to channelid: ${channelId}`);
     return false;
   }
 };
@@ -168,10 +165,11 @@ app.get("/api/catalogue/categories/:categoryID/products", (req, res) => {
  * @see Category
  */
 app.get("/api/catalogue/categories", (req, res) => {
-  const { page, per_page: perPage } = req.query;
+  const { page, per_page: perPage, filter, search } = req.query;
 
   let query = "", cols = [];
 
+  /* Parse page parameters (MYSQL: LIMIT OFFSET)
   /* Only difference -> if page: "... LIMIT ? ..."; cols = [page] */
   if (page != null) {
 
@@ -183,15 +181,6 @@ app.get("/api/catalogue/categories", (req, res) => {
       
     if (page_ === NaN || limit === NaN)
       return responseError(res, 500, "Could not parse query parameters")
-
-    /**
-     * 
-     * page 1, perPage 10:
-     *  1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-     * 
-     * page 2, perPage 10:
-     * 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
-     */
 
     const offset = (page_ - 1) * limit;
     

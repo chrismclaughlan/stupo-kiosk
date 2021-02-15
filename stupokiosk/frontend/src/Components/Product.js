@@ -1,12 +1,8 @@
 import { useState } from "react";
 
 export default function Product(props) {
-  const [animate, setAnimate] = useState(0);
-
   function productClick() {
-    setAnimate(0);
     props.onClick(props.product);
-    setAnimate(1);
   }
 
   return (
@@ -31,11 +27,9 @@ export default function Product(props) {
       <div className="float-right">€{props.product.price.toFixed(2)}</div>
       <div>{props.product.name}</div>
       <img
-        className="float-right w-6 opacity-20 group-hover:opacity-60 product-basket-animation"
+        className="float-right w-6 opacity-20 group-hover:opacity-60 "
         src={props.iconSrc}
         alt="What happens when I press on product"
-        onAnimationEnd={() => setAnimate(0)}
-        animate={animate}
       ></img>
       <br></br>
     </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import CatalogueProducts from "./CatalogueProducts";
-import CatalogueCategories from "./CatalogueCategories";
+import CatalogueProducts from "./Products";
+import CatalogueCategories from "./Categories";
 
 export default function Catalogue(props) {
 //   useEffect(() => {

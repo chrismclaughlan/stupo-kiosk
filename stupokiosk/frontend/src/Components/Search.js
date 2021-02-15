@@ -56,6 +56,11 @@ export default function Search(props) {
     }
   }
 
+  function onSearchingFor(suggestion) {
+    props.setSearchingFor(suggestion.id);
+
+  }
+
   return (
     <div ref={searchFocusRef} className="relative w-1/2 sm:w-1/3">
       <input
@@ -71,12 +76,13 @@ export default function Search(props) {
           {suggestions.map((suggestion, i) => {
             return (
               <div key={i} className="group">
-                <div
+                <Link
+                  to="/"
                   className="block text-2xl sm:text-base p-2 bg-theme-1-50 rounded-b group-hover:text-theme-1-900"
-                  onClick={() => props.setSearchingFor(suggestion.id)}
+                  onClick={() => onSearchingFor(suggestion)}
                 >
                   {suggestion.name}
-                </div>
+                </Link>
               </div>
             );
           })}

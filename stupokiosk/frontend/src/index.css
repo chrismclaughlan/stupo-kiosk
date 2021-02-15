@@ -5,22 +5,23 @@
 @tailwind utilities;
 
 @keyframes productToBasketAnimation {
-    25% {
+    /* 25% {
         transform: rotate(15deg);
-        opacity: 100%;
     }
     50% {
         transform: rotate(-30deg);
-        opacity: 100%;
     }
     75% {
         transform: rotate(5deg);
-        opacity: 100%;
     }
     100% {
         transform: rotate(0deg);
-        opacity: 0%;
-    }
+    } */
+    0% {transform:rotate(0deg);}
+    10% {transform:rotate(-20deg);}
+    80% {transform:rotate(740deg);}
+    90% {transform:rotate(710deg);}
+    100% {transform:rotate(720deg);}
 }
 
 @keyframes catalogueCategoriesAnimation {
@@ -46,6 +47,15 @@
     overflow: scroll;
 } */
 
+.arrow-down {
+    border: solid gray;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
 .catalogue-categories[hide="1"] {
     transition: all 1s ease-in-out;
     transform: translate(-100%, 0%);
@@ -65,7 +75,7 @@
     overflow: hidden;
 } */
 
-.product-basket-animation[animate='1'] {
+.basket-animation[animate='1'] {
     animation: productToBasketAnimation 1.5s 1 ease-in-out;
 }
 
@@ -146,7 +156,7 @@ header {
 }
 
 .product:active {
-    transform: scale(1.02);
+    transform: scale(1.1);
     transition: all .02s ease-in-out;
 }
 
@@ -155,4 +165,80 @@ header {
     visibility: hidden;
     overflow: hidden;
     animation: hedgehogAnimation 30s infinite linear;
+}
+
+@keyframes sweepOffLeft{
+    0% {
+        opacity: 100%;
+        transform: translate(0%, 0%);
+    }
+    100% {
+        opacity: 0%;
+        transform: translate(-50%, 0%);
+    }
+}
+
+@keyframes sweepOffRight{
+    0% {
+        opacity: 100%;
+        transform: translate(0%, 0%);
+    }
+    100% {
+        opacity: 0%;
+        transform: translate(50%, 0%);
+    }
+}
+
+@keyframes sweepOnRight{
+    0% {
+        opacity: 0%;
+        transform: translate(50%, 0%);
+    }
+    100% {
+        opacity: 100%;
+        transform: translate(0%, 0%);
+    }
+}
+
+@keyframes sweepOnLeft{
+    0% {
+        opacity: 0%;
+        transform: translate(-50%, 0%);
+    }
+    100% {
+        opacity: 100%;
+        transform: translate(0%, 0%);
+    }
+}
+
+/* .page-transition {
+    position:fixed;
+    padding:0;
+    margin:0;
+
+    top:0;
+    left: 0;
+
+    z-index: 0;
+
+    width: 100%;
+    height: 100%;
+    background:rgba(255,0,0, 0.5);
+
+} */
+
+.page-transition[page="total"] {
+    animation: sweepOnLeft 0.5s 1 ease-in-out;
+}
+
+.page-transition[page="payment"] {
+    animation: sweepOnRight 0.5s 1 ease-in-out;
+}
+
+.page-transition[page="total-leave"] {
+    animation: sweepOffLeft 0.5s 1 ease-in-out;
+}
+
+.page-transition[page="payment-leave"] {
+    animation: sweepOffRight 0.5s 1 ease-in-out;
 }
