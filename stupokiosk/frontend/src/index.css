@@ -160,6 +160,10 @@ header {
     transition: all .02s ease-in-out;
 }
 
+.no-click {
+    pointer-events: none;
+}
+
 .hedgehog {
     bottom: 0%;
     visibility: hidden;

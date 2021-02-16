@@ -8,11 +8,9 @@ export default function CatalogueProducts(props) {
     <>
       <div className="flex justify-center">
         <div className="flex flex-wrap justify-around w-full md:w-3/4 lg:w-4/6 xl:w-1/2 border-b-2 pt-6 pb-4 mb-2">
-          <button className="btn-standard">Food</button>
-          <button className="btn-standard">Snacks</button>
-          <button className="btn-standard">Toiletries</button>
-          <button className="btn-standard">Soft Drinks</button>
-          <button className="btn-standard">Alcoholic Drinks</button>
+          <button className="btn-standard">Reset</button>
+          <button className="btn-standard">Sort by Price</button>
+          <button className="btn-standard">Sort by Quantity</button>
         </div>
       </div>
 

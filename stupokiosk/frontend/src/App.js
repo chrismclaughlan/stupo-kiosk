@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Search from "./Components/Search";
 
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
@@ -12,13 +12,16 @@ import TermsAndConditions from "./Components/Legal/TermsAndConditions";
 function App() {
   const [errorMsg, setErrorMsg] = useState("");
   const [showHelp, setShowHelp] = useState(false);
+  const helpMenuRef = useRef(null);
 
   /* Search bar */
   const [searchString, setSearchString] = useState("");
   const [searchingFor, setSearchingFor] = useState(null);
+  const [hideSuggestions, setHideSuggestions] = useState(true);
+  const searchFocusRef = useRef(null);
 
   /* Basket */
-  const [basketList, setBasketList] = useState(
+  const [basketList, setBasketList] = useState(() => 
     JSON.parse(localStorage.getItem("basketList")) || []
   );
   const [showBasket, setShowBasket] = useState(false);
@@ -34,37 +37,49 @@ function App() {
   const [fetchingCategoryList, setFetchingCategoryList] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
   const [productList, setProductList] = useState([]);
+  const [filter, setFilter] = useState(null);
+  const [showTopBtn, setShowTopBtn] = useState(false);
   //   listofcategories.slice(0, 10)
   // );
 
   useEffect(() => {
     if (!searchingFor) return;
 
-    fetchCategory();
+    fetchProducts();
   }, [searchingFor]);
 
-  async function fetchCategory() {
+  async function fetchProducts() {
     if (searchingFor == null) return;
 
     fetch(`/api/catalogue/categories/${searchingFor}/products`)
       .then((res) => res.json())
       .then((results) => {
-        if (!Array.isArray(results) || results.length === 0) {
+        if (!Array.isArray(results) || results.length === 0)
           return;
-        }
 
-        console.log(results);
         setProductList(results); // TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
       })
-      .catch((error) => console.log(`error: ${error}`));
+      .catch((error) => {
+        console.error(`error: ${error}`)
+        setErrorMsg(`Error fetching product: ${error}`)
+      });
 
     setSearchingFor(null);
+  }
+
+  function categoriesFilter(newFilter) {
+    setFilter(newFilter);
+    setCategoryList([]);
+    setCategoriesPage(1);
+    setIsEndOfCategories(false);
+    setFetchingCategoryList(true);
   }
 
   async function fetchCategoryList() {
     if (isEndOfCategories || searchingFor != null) return;
 
-    fetch(`/api/catalogue/categories?page=${categoriesPage}&per_page=10`)
+    const queryFilter = filter == null ? "" : `&search=${filter}`;
+    fetch(`/api/catalogue/categories?page=${categoriesPage}&per_page=10${queryFilter}`)
       .then((res) => res.json())
       .then((results) => {
         if (!Array.isArray(results) || results.length === 0) {
@@ -74,7 +89,10 @@ function App() {
         setCategoryList([...categoryList, ...results]);
         setCategoriesPage(categoriesPage + 1);
       })
-      .catch((error) => console.log(`error: ${error}`));
+      .catch((error) => {
+        console.error(`error: ${error}`)
+        setErrorMsg(`Error fetching categories: ${error}`)
+      });
 
     setFetchingCategoryList(false);
   }
@@ -148,7 +166,6 @@ function App() {
       setBasketList(newBasketList);
     }
   }
-  console.log(window.innerHeight, window.scrollY, document.body.offsetHeight);
 
   function basketQuantityIncrease(p) {
     let index = basketProductGetIndex(p);
@@ -176,6 +193,32 @@ function App() {
     }
   }
 
+  function resetEscape() {
+    setHideSuggestions(true);
+  }
+
+  document.onKeypress = function (e) {
+    e = e || window.event;
+
+    if (e.keyCode === 27) {
+      resetEscape();
+      console.log("escape")
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => window.removeEventListener("mousedown", handleClickOutside);
+  });
+
+  function handleClickOutside(e) {
+    if (searchFocusRef && searchFocusRef.current && !searchFocusRef.current.contains(e.target))
+      setHideSuggestions(true);
+
+    if (helpMenuRef && helpMenuRef.current && !helpMenuRef.current.contains(e.target))
+      setShowHelp(false);
+  }
+
   return (
     <BrowserRouter>
       <header className="bg-white p-4 flex justify-between items-center border-b border-grey z-50">
@@ -198,7 +241,16 @@ function App() {
 
         <div className="ml-0 sm:ml-6">
           <Link
-            onClick={() => setProductList([])}
+            onClick={() => {
+              setProductList([])
+              setFilter(null);
+              setShowBasket(false);
+              setShowHelp(false);
+              setHideSuggestions(true);
+              window.scrollTo(0, 0);
+              setShowTopBtn(false);
+              categoriesFilter(null);
+            }}
             to="/"
             className="flex items-center space-x-4"
           >
@@ -212,9 +264,14 @@ function App() {
         </div>
 
         <Search
+          searchFocusRef={searchFocusRef}
+          hideSuggestions={hideSuggestions}
+          setHideSuggestions={setHideSuggestions}
           setErrorMsg={setErrorMsg}
+          searchString={searchString}
           setSearchString={setSearchString}
           list={categoryList}
+          searchingFor={searchingFor}
           setSearchingFor={setSearchingFor}
         />
 
@@ -227,9 +284,12 @@ function App() {
             ></img>
           </div> */}
 
+          <div className={"fixed p-0 m-0 top-0 left-0 w-full h-full bg-black transition-all" + (showHelp ? " opacity-20" : " opacity-0 no-click")}></div>
+
+
           <div
             onClick={() => setShowBasket(!showBasket)}
-            className="flex items-center space-x-1 inline-block z-10 cursor-pointer"
+            className="flex items-center space-x-1 mr-2 inline-block z-10 cursor-pointer"
           >
             <img
               className="inline-block w-6 basket-animation"
@@ -241,7 +301,7 @@ function App() {
             <div className="inline-block px-0">{getBasketTotalQuantity()}</div>
           </div>
 
-          <div className="relative inline-block z-10">
+          <div ref={helpMenuRef} className="relative inline-block z-10">
             <img
               onClick={() => setShowHelp(!showHelp)}
               className="w-6 cursor-pointer"
@@ -249,11 +309,11 @@ function App() {
               src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/help-256.png"
             ></img>
 
-            <div className={"absolute bg-white right-0 top-full w-52 my-1 shadow border border-gray-300 transition-all" + (showHelp ? " opacity-100" : " transform translate-x-full opacity-0")}>
-              <Link to="/who-are-we" className="block py-2 px-4 hover:bg-gray-200">Who Are We?</Link>
-              <Link to="/contact-us" className="block py-2 px-4 hover:bg-gray-200">Contact Us</Link>
-              <Link to="/privacy-policy" className="block py-2 px-4 hover:bg-gray-200">Privacy Policy</Link>
-              <Link to="/terms-and-conditions" className="block py-2 px-4 hover:bg-gray-200">Terms and Conditions</Link>
+            <div className={"absolute bg-white right-0 top-full w-52 my-1 shadow border border-gray-300 transition-all z-50" + (showHelp ? " opacity-100" : " transform translate-x-full opacity-0")}>
+              <Link onClick={() => setShowHelp(false)} to="/who-are-we" className="block py-2 px-4 hover:bg-gray-200">Who Are We?</Link>
+              <Link onClick={() => setShowHelp(false)} to="/contact-us" className="block py-2 px-4 hover:bg-gray-200">Contact Us</Link>
+              <Link onClick={() => setShowHelp(false)} to="/privacy-policy" className="block py-2 px-4 hover:bg-gray-200">Privacy Policy</Link>
+              <Link onClick={() => setShowHelp(false)} to="/terms-and-conditions" className="block py-2 px-4 hover:bg-gray-200">Terms and Conditions</Link>
             </div>
           </div>
 
@@ -344,6 +404,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <Catalogue
+              showTopBtn={showTopBtn}
+              setShowTopBtn={setShowTopBtn}
+              categoriesFilter={categoriesFilter}
               productList={productList}
               setProductList={setProductList}
               isEndOfCategories={isEndOfCategories}

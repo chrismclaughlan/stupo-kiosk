@@ -28,6 +28,7 @@ export default function Catalogue(props) {
             addToBasketCallback={props.addToBasketCallback}
           /> 
         : <CatalogueCategories 
+            categoriesFilter={props.categoriesFilter}
             setShowTopBtn={setShowTopBtn}
             isEndOfCategories={props.isEndOfCategories}
             setErrorMsg={props.setErrorMsg}

@@ -161,13 +161,16 @@ app.get("/api/catalogue/categories/:categoryID/products", (req, res) => {
  *
  * @function
  * @name GET/api/catalogue/categories
- * @param {number} [req.query.page] - Page number of which to query from db
+ * @param {number} [req.query.page] - Page number of results (OFFSET in mysql)
+ * @param {number} [req.query.per_page] - Number of results in page (LIMIT in mysql)
+ * @param {number} [req.query.search] - Search string to find in 'keywords' column in mysql for categories
  * @see Category
  */
 app.get("/api/catalogue/categories", (req, res) => {
-  const { page, per_page: perPage, filter, search } = req.query;
+  const { page, per_page: perPage, search } = req.query;
 
-  let query = "", cols = [];
+  let colsPages = [], colsSearch = [];
+  let queryPages = "", querySearch = "";
 
   /* Parse page parameters (MYSQL: LIMIT OFFSET)
   /* Only difference -> if page: "... LIMIT ? ..."; cols = [page] */
@@ -183,21 +186,24 @@ app.get("/api/catalogue/categories", (req, res) => {
       return responseError(res, 500, "Could not parse query parameters")
 
     const offset = (page_ - 1) * limit;
-    
-    query = `SELECT t.id, t.name, t.keywords, t.image, t.description, GROUP_CONCAT(t.products) AS products FROM 
-    (SELECT c.id, c.name, c.keywords, c.image, c.description, 
-    JSON_OBJECT('id', p.id, 'name', p.name, 'image', p.image, 'price', p.price, 'priceDiscounted', p.price_discounted)
-    AS products FROM categories AS c, products AS p WHERE p.category_id = c.id) t
-    GROUP BY t.id LIMIT ? OFFSET ?`;
-    cols = [limit, offset];
-  } else {
-    query = `SELECT t.id, t.name, t.keywords, t.image, t.description, GROUP_CONCAT(t.products) AS products FROM 
-    (SELECT c.id, c.name, c.keywords, c.image, c.description, 
-    JSON_OBJECT('id', p.id, 'name', p.name, 'image', p.image, 'price', p.price, 'priceDiscounted', p.price_discounted)
-    AS products FROM categories AS c, products AS p WHERE p.category_id = c.id) t
-    GROUP BY t.id`;
+
+    queryPages = " LIMIT ? OFFSET ?";
+    colsPages = [limit, offset];
   }
 
+  if (search != null) {
+    querySearch = " AND keywords LIKE ?";
+    colsSearch = ["%"+search+"%"];
+  }
+  
+
+  const query = 
+`SELECT t.id, t.name, t.keywords, t.image, t.description, GROUP_CONCAT(t.products) AS products FROM 
+(SELECT c.id, c.name, c.keywords, c.image, c.description, 
+JSON_OBJECT('id', p.id, 'name', p.name, 'image', p.image, 'price', p.price, 'priceDiscounted', p.price_discounted)
+AS products FROM categories AS c, products AS p WHERE p.category_id = c.id ${querySearch}) t
+GROUP BY t.id ${queryPages}`
+  const cols = [...colsSearch, ...colsPages];
 
   return queryDatabase(res, query, cols, (results) => {
 
