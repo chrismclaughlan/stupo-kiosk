@@ -34,7 +34,9 @@ var validator = require("validator");
 /* Discord API */
 const Discord = require("discord.js");
 const discordClient = new Discord.Client();
-discordClient.on("error", () => discordClient.login(process.env.REACT_APP_DISCORD_BOT_TOKEN));
+discordClient.on("error", () =>
+  discordClient.login(process.env.REACT_APP_DISCORD_BOT_TOKEN)
+);
 discordClient.on("ready", () => {
   console.log(`${discordClient.user.tag} successfully logged in`);
 });
@@ -47,30 +49,38 @@ discordClient.login(process.env.REACT_APP_DISCORD_BOT_TOKEN);
  */
 const discordSendMessage = (message, channelId = "809568968461123618") => {
   const channel = discordClient.channels.cache.get(channelId);
-  if (channel && channel.send(message + "").catch(error => console.error(`discordClient Error: ${error}`))) {
+  if (
+    channel &&
+    channel
+      .send(message + "")
+      .catch((error) => console.error(`discordClient Error: ${error}`))
+  ) {
     return true;
   } else {
-    console.error(`Discord bot Could not send message to channelid: ${channelId}`);
+    console.error(
+      `Discord bot Could not send message to channelid: ${channelId}`
+    );
     return false;
   }
 };
 
-
 /* MYSQL queries */
 
 function responseError(res, code, description, setHeader = {}) {
-  if (setHeader)
-    res.set(setHeader);
-  
-  res.status(code).json({errorDescription: description});
+  if (setHeader) res.set(setHeader);
+
+  res.status(code).json({ errorDescription: description });
 }
 
 const queryDatabase = (res, query, cols, callback) => {
-
   db.query(query, cols, (err, results) => {
     if (err) {
-      console.error(err)
-      return responseError(res, 500, 'Server encountered an error querying the database');
+      console.error(err);
+      return responseError(
+        res,
+        500,
+        "Server encountered an error querying the database"
+      );
     }
 
     if (results == null || results.length === 0)
@@ -78,8 +88,7 @@ const queryDatabase = (res, query, cols, callback) => {
 
     return callback(results);
   });
-}
-
+};
 
 /* Type definitions / Docs */
 
@@ -123,7 +132,6 @@ const queryDatabase = (res, query, cols, callback) => {
  * @property {string} PaymentMethod - Method for payment
  */
 
-
 /**
  * Returns list of products under a specific category.
  *
@@ -138,23 +146,23 @@ app.get("/api/catalogue/categories/:categoryID/products", (req, res) => {
   const { price } = req.query;
 
   if (categoryID != null) {
-
     let query = "SELECT * FROM products WHERE category_id = ?";
 
-    if (price === "low")
-      query += " ORDER BY price ASC";  // TODO change db to take price as default and price_original if discounted -----------------------------------
-    else if (price === "high")
-      query += " ORDER BY price DESC";
+    if (price === "low") query += " ORDER BY price ASC";
+    // TODO change db to take price as default and price_original if discounted -----------------------------------
+    else if (price === "high") query += " ORDER BY price DESC";
 
     return queryDatabase(res, query, [categoryID], (results) => {
       return res.json(results);
     });
   }
 
-
-  return responseError(res, 404, "Invalid/Missing parameters/query, expected: /api/catalogue/categories/:some_category_id/products")
+  return responseError(
+    res,
+    404,
+    "Invalid/Missing parameters/query, expected: /api/catalogue/categories/:some_category_id/products"
+  );
 });
-
 
 /**
  * Returns list of categories.
@@ -169,44 +177,41 @@ app.get("/api/catalogue/categories/:categoryID/products", (req, res) => {
 app.get("/api/catalogue/categories", (req, res) => {
   const { page, per_page: perPage, search } = req.query;
 
-  let colsPages = [], colsSearch = [];
-  let queryPages = "", querySearch = "";
+  let colsPages = [],
+    colsSearch = [];
+  let queryPages = "",
+    querySearch = "";
 
   /* Parse page parameters (MYSQL: LIMIT OFFSET)
   /* Only difference -> if page: "... LIMIT ? ..."; cols = [page] */
   if (page != null) {
+    let limit,
+      page_ = parseInt(page + "", 10);
+    if (perPage != null) limit = parseInt(perPage + "", 10);
+    else limit = 10; // default per page
 
-    let limit, page_ = parseInt(page + "", 10);
-    if (perPage != null)
-      limit = parseInt(perPage + "", 10);
-    else
-      limit = 10;  // default per page
-      
-    if (page_ === NaN || limit === NaN)
-      return responseError(res, 500, "Could not parse query parameters")
+    if (page_ !== page_ || limit !== limit)
+      return responseError(res, 500, "Could not parse query parameters");
 
     const offset = (page_ - 1) * limit;
 
-    queryPages = " LIMIT ? OFFSET ?";
+    queryPages = "LIMIT ? OFFSET ?";
     colsPages = [limit, offset];
   }
 
   if (search != null) {
-    querySearch = " AND keywords LIKE ?";
-    colsSearch = ["%"+search+"%"];
+    querySearch = "AND keywords LIKE ?";
+    colsSearch = ["%" + search + "%"];
   }
-  
 
-  const query = 
-`SELECT t.id, t.name, t.keywords, t.image, t.description, GROUP_CONCAT(t.products) AS products FROM 
+  const query = `SELECT t.id, t.name, t.keywords, t.image, t.description, GROUP_CONCAT(t.products) AS products FROM 
 (SELECT c.id, c.name, c.keywords, c.image, c.description, 
 JSON_OBJECT('id', p.id, 'name', p.name, 'image', p.image, 'price', p.price, 'priceDiscounted', p.price_discounted)
 AS products FROM categories AS c, products AS p WHERE p.category_id = c.id ${querySearch}) t
-GROUP BY t.id ${queryPages}`
+GROUP BY t.id ${queryPages}`;
   const cols = [...colsSearch, ...colsPages];
 
   return queryDatabase(res, query, cols, (results) => {
-
     for (var i = 0; i < results.length; i++)
       results[i].products = JSON.parse(`[${results[i].products}]`);
 
@@ -214,9 +219,7 @@ GROUP BY t.id ${queryPages}`
   });
 });
 
-
 const ACCEPTED_PAYMENT_METHODS = ["cash"];
-
 
 /** TODO
  * - Remove Items from stock + Create "order" object + notify people
@@ -228,12 +231,14 @@ const ACCEPTED_PAYMENT_METHODS = ["cash"];
 app.post("/api/orders", (req, res) => {
   let { items, customerInfo, paymentMethod } = req.body;
 
-
   /* Validate json keys */
   if (items == null || customerInfo == null || paymentMethod == null) {
-    return responseError(res, 400, 'Expected keys not defined, expected: "items": [...], "customerInfo": {...}, paymentMethod: "..."')
+    return responseError(
+      res,
+      400,
+      'Expected keys not defined, expected: "items": [...], "customerInfo": {...}, paymentMethod: "..."'
+    );
   }
-
 
   /* Escape json data */
   customerInfo.name = validator.escape(customerInfo.name + "");
@@ -245,52 +250,76 @@ app.post("/api/orders", (req, res) => {
       : validator.escape(customerInfo.comment + "");
   paymentMethod = validator.escape(paymentMethod + "");
 
-
   /* Validate json data */
   if (ACCEPTED_PAYMENT_METHODS.indexOf(paymentMethod) === -1)
-    return responseError(res, 422, `Invalid paymentMethod, expected: ${ACCEPTED_PAYMENT_METHODS}`)
+    return responseError(
+      res,
+      422,
+      `Invalid paymentMethod, expected: ${ACCEPTED_PAYMENT_METHODS}`
+    );
   else if (customerInfo.name.length <= 1 || customerInfo.address.length <= 1)
-    return responseError(res, 422, 'Invalid value for customerInfo "name" or "address", expected string with length > 1')
+    return responseError(
+      res,
+      422,
+      'Invalid value for customerInfo "name" or "address", expected string with length > 1'
+    );
   else if (!validator.isMobilePhone(customerInfo.phone))
-    return responseError(res, 422, 'Invalid value for customerInfo "phone" (number), expected for example: "+49xxxxxxxxxxx"')
-  else if (!items.every(itm => typeof itm.productID === "number" && typeof itm.productQuantity === "number"))
-    return responseError(res, 422, 'Invalid value(s) for "items", expected: {"productID": some_integer, "productQuantity": some_integer}')
-
+    return responseError(
+      res,
+      422,
+      'Invalid value for customerInfo "phone" (number), expected for example: "+49xxxxxxxxxxx"'
+    );
+  else if (
+    !items.every(
+      (itm) =>
+        typeof itm.productID === "number" &&
+        typeof itm.productQuantity === "number"
+    )
+  )
+    return responseError(
+      res,
+      422,
+      'Invalid value(s) for "items", expected: {"productID": some_integer, "productQuantity": some_integer}'
+    );
 
   /* Prepare MYSQL query */
   let cols = [];
   let query = "SELECT * FROM products WHERE id IN (";
 
   for (var i = 0; i < items.length; i++) {
-    cols.push(items[i].productID)
-    if (i !== (items.length - 1))
-      query += "?, ";
-    else
-      query += "?) ORDER BY id ASC";
+    cols.push(items[i].productID);
+    if (i !== items.length - 1) query += "?, ";
+    else query += "?) ORDER BY id ASC";
   }
 
-  const orderId = 1234567890;  // TODO
+  const orderId = 1234567890; // TODO
 
   queryDatabase(res, query, cols, (results) => {
-
     /* Form table from results. table describes order for employee delivery/organisation */
-    let table = "", paymentDue = 0;
+    let table = "",
+      paymentDue = 0;
 
     // Loop each result (product) and find it's matching id in POST data. If found (productID exists in db), append item row to table.
     for (var i = 0; i < items.length; i++) {
       let productPOST = items[i];
-      let productDB = results.find(p => p.id === productPOST.productID);
+      let productDB = results.find((p) => p.id === productPOST.productID);
 
       if (productDB === undefined)
-        return responseError(res, 200, `Could not find productID: ${productPOST.productID} in db`);
+        return responseError(
+          res,
+          200,
+          `Could not find productID: ${productPOST.productID} in db`
+        );
 
-      let price = productDB.price_discounted ? productDB.price_discounted : productDB.price;
+      let price = productDB.price_discounted
+        ? productDB.price_discounted
+        : productDB.price;
       let quantity = productPOST.productQuantity;
       let total = price * quantity;
       let name = productDB.name;
 
       table += `\n## '€${price} x${quantity} -> €${total}\t${name}'`;
-      
+
       paymentDue += total;
     }
 
@@ -302,7 +331,11 @@ app.post("/api/orders", (req, res) => {
 # '${moment().format("MMMM Do YYYY, h:mm:ss a")}'
 # Name: '${customerInfo.name}'
 # Address: '${customerInfo.address}'
-# Phone: ${customerInfo.phone}${customerInfo.comment ? "\n# Comment: '" + customerInfo.comment + "'" : ""}
+# Phone: ${customerInfo.phone}${
+        customerInfo.comment
+          ? "\n# Comment: '" + customerInfo.comment + "'"
+          : ""
+      }
 #${table}
 #
 # Payment Method: '${paymentMethod}'
@@ -311,10 +344,13 @@ app.post("/api/orders", (req, res) => {
 `
     );
 
-
     if (!messageSuccessful)
-      return responseError(res, 503, "Could not issue order message, please try again", {'Retry-After': '500'});
-    
+      return responseError(
+        res,
+        503,
+        "Could not issue order message, please try again",
+        { "Retry-After": "500" }
+      );
 
     // Success
     res.status(200).end();

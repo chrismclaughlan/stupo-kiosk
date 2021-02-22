@@ -1,8 +1,10 @@
-import Product from '../Product'
+import { useContext } from "react";
+import { BasketContext, ItemsContext } from "../Contexts";
+import Product from "../Product";
 
-export default function CatalogueProducts(props) {
-
-    console.log(props.productsList)
+const CatalogueProducts = () => {
+  const { basketDispatch } = useContext(BasketContext);
+  const { productList } = useContext(ItemsContext);
 
   return (
     <>
@@ -16,16 +18,19 @@ export default function CatalogueProducts(props) {
 
       <div className="flex justify-center">
         <div className="relative flex-col w-full md:w-3/4 lg:w-4/6 xl:w-1/2">
-          {(Array.isArray(props.productList) && props.productList.length !== 0) &&
-            props.productList.map((product, i) => {
+          {Array.isArray(productList) &&
+            productList.length !== 0 &&
+            productList.map((product, i) => {
               return (
                 <Product
                   key={i}
                   index={i}
                   product={product}
-                  onClick={props.addToBasketCallback}
+                  onClick={() => basketDispatch({ type: "add", product })}
                   extraStyling={"active:bg-theme-3-200 hover:bg-theme-3-100"}
-                  iconSrc={"https://cdn0.iconfinder.com/data/icons/elasto-online-store/26/00-ELASTOFONT-STORE-READY_bag-256.png"}
+                  iconSrc={
+                    "https://cdn0.iconfinder.com/data/icons/elasto-online-store/26/00-ELASTOFONT-STORE-READY_bag-256.png"
+                  }
                 />
               );
             })}
@@ -33,4 +38,6 @@ export default function CatalogueProducts(props) {
       </div>
     </>
   );
-}
+};
+
+export default CatalogueProducts;

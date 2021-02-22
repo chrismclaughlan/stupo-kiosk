@@ -1,0 +1,33 @@
+{
+  "name": "admin-stupokiosk-backend",
+  "version": "1.0.0",
+  "description": "Backend of admin panel to manage database behind the scenes",
+  "main": "admin-stupokiosk.js",
+  "scripts": {
+    "start": "nodemon admin-stupokiosk.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrismclaughlan/stupo-kiosk.git"
+  },
+  "author": "Chris M",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrismclaughlan/stupo-kiosk/issues"
+  },
+  "homepage": "https://github.com/chrismclaughlan/stupo-kiosk#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "email-validator": "^2.0.4",
+    "express": "^4.17.1",
+    "express-mysql-session": "^2.1.5",
+    "multer": "^1.4.2",
+    "sharp": "^0.27.1"
+  }
+}

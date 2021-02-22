@@ -1,10 +1,4 @@
-import { useState } from "react";
-
-export default function Product(props) {
-  function productClick() {
-    props.onClick(props.product);
-  }
-
+const Product = (props) => {
   return (
     <div
       className={
@@ -16,7 +10,7 @@ export default function Product(props) {
           props.index * 0.1
         }s ease-out 0s 1 slideInFromAboveAnimation`,
       }}
-      onClick={() => productClick()}
+      onClick={() => props.onClick(props.product)}
     >
       <img
         width="50px"
@@ -34,4 +28,6 @@ export default function Product(props) {
       <br></br>
     </div>
   );
-}
+};
+
+export default Product;

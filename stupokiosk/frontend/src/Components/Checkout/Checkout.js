@@ -1,87 +1,126 @@
-import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useState, useEffect, useContext, useReducer } from "react";
 import CheckoutTotal from "./Total";
 import CheckoutPayment from "./Payment";
+import { BasketContext } from "../Contexts";
+//import isMobilePhone from "validator/es/lib/isMobilePhone";
 
-export default function Checkout(props) {
+const FIELD_MAX_LENGTH = 30;
+const FIELD_MIN_LENGTH = 2;
+const PHONE_MIN_LENGTH = 7;
+
+const formReducer = (state, action) => {
+  if (action.value.length > FIELD_MAX_LENGTH) return state;
+
+  switch (action.type) {
+    case "name":
+      return {
+        ...state,
+        name: {
+          value: action.value,
+          valid: action.value.trim().length >= FIELD_MIN_LENGTH,
+        },
+      };
+    case "address":
+      return {
+        ...state,
+        address: {
+          value: action.value,
+          valid: action.value.trim().length >= FIELD_MIN_LENGTH,
+        },
+      };
+    case "phone":
+      return {
+        ...state,
+        phone: {
+          value: action.value,
+          valid: action.value.trim().length >= PHONE_MIN_LENGTH, //isMobilePhone(phone + ""),
+        },
+      };
+    case "comment":
+      return {
+        ...state,
+        comment: {
+          value: action.value,
+          valid: action.value.trim().length > 0, // Because optional
+        },
+      };
+
+    default:
+      return state;
+  }
+};
+
+const Checkout = ({ setErrorMsg }) => {
+  const basket = useContext(BasketContext);
+
   const [page, setPage] = useState("total");
 
-  /* Form */
-  const [formName, setFormName] = useState("");
-  const [formAddress, setFormAddress] = useState("");
-  const [formPhone, setFormPhone] = useState("");
-  const [formComment, setFormComment] = useState("");
+  /* Form TODO formix? */
+  // const [formName, setFormName] = useState("");
+  // const [formAddress, setFormAddress] = useState("");
+  // const [formPhone, setFormPhone] = useState("");
+  // const [formComment, setFormComment] = useState("");
+
+  const [form, formDispatch] = useReducer(formReducer, {
+    name: { value: "", valid: false },
+    address: { value: "", valid: false },
+    phone: { value: "", valid: false },
+    comment: { value: "", valid: false },
+  });
 
   useEffect(() => {
-    props.setShowBasket(false);
-  }, [props]);
+    basket.setShowBasket(false);
+  }, [basket]);
 
+  /* Clear error message on mount and unmount */
   useEffect(() => {
-    props.setErrorMsg("");
+    setErrorMsg("");
 
     return () => {
-      props.setErrorMsg("");
+      setErrorMsg("");
     };
-  }, []);
+  }, [setErrorMsg]);
 
-  function leaveTotal() {
-    console.log(`leaveTotal() page=${page}`)
-    if (page === "total-leave") {
-      setPage("payment")
-      console.log("setPage(payment)")
-    }
-  }
+  const leaveTotal = () => {
+    if (page === "total-leave") setPage("payment");
+  };
 
-  function leavePayment() {
-    console.log(`leavePayment() page=${page}`)
-    if (page === "payment-leave") {
-      setPage("total")
-      console.log("setPage(total)")
-    }
-  }
+  const leavePayment = () => {
+    if (page === "payment-leave") setPage("total");
+  };
 
   return (
     <div className="relative">
-      {
-        (page === "total" || page === "total-leave") && 
-        <div page={page} onAnimationEnd={() => leaveTotal()} className="page-transition">
+      {(page === "total" || page === "total-leave") && (
+        <div
+          page={page}
+          onAnimationEnd={() => leaveTotal()}
+          className="page-transition"
+        >
           <CheckoutTotal
-            page={page}
             setPage={setPage}
-            formName={formName}
-            setFormName={setFormName}
-            formAddress={formAddress}
-            setFormAddress={setFormAddress}
-            formPhone={formPhone}
-            setFormPhone={setFormPhone}
-            formComment={formComment}
-            setFormComment={setFormComment}
-            basketList={props.basketList}
-            basketRemove={props.basketRemove}
-            basketQuantityIncrease={props.basketQuantityIncrease}
-            basketQuantityDecrease={props.basketQuantityDecrease} 
-            getBasketTotalPrice={props.getBasketTotalPrice}
-            setErrorMsg={props.setErrorMsg}
+            setErrorMsg={setErrorMsg}
+            form={form}
+            formDispatch={formDispatch}
           />
         </div>
-      }
+      )}
 
-      {
-        (page === "payment" || page === "payment-leave") && 
-        <div page={page} onAnimationEnd={() => leavePayment()} className="page-transition">
+      {(page === "payment" || page === "payment-leave") && (
+        <div
+          page={page}
+          onAnimationEnd={() => leavePayment()}
+          className="page-transition"
+        >
           <CheckoutPayment
-            page={page}
             setPage={setPage}
-            formName={formName}
-            formAddress={formAddress}
-            formPhone={formPhone}
-            formComment={formComment}
-            basketList={props.basketList}
-            setErrorMsg={props.setErrorMsg}
-            setBasketList={props.setBasketList}
+            setErrorMsg={setErrorMsg}
+            form={form}
           />
         </div>
-      }
+      )}
     </div>
   );
-}
+};
+
+export default Checkout;

@@ -1,14 +1,14 @@
-import {useEffect} from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const helpPhoneNumber = "4917664303674";
-const helpMessage = "";
+const WHATSAPP_PHONE_NUMBER = "4917664303674";
+const WHATSAPP_HELP_MESSAGE = "";
 
 /**
  * IDEA: GIF animation of hedgehog pushing trolly -> once here trolly empties and it goes back <-
  */
 
-export default function OrderConfirmed(props) {
+const OrderConfirmed = (props) => {
   useEffect(() => {
     props.setShowBasket(false);
   }, [props]);
@@ -30,7 +30,12 @@ export default function OrderConfirmed(props) {
         className="mt-1 font-thin hover:underline"
         target="_blank"
         rel="noopener noreferrer"
-        href={"https://wa.me/" + helpPhoneNumber + "?text=" + helpMessage}
+        href={
+          "https://wa.me/" +
+          WHATSAPP_PHONE_NUMBER +
+          "?text=" +
+          WHATSAPP_HELP_MESSAGE
+        }
       >
         Need help or is your order taking too long?
       </a>
@@ -41,4 +46,6 @@ export default function OrderConfirmed(props) {
       ></img>
     </div>
   );
-}
+};
+
+export default OrderConfirmed;
