@@ -1,6 +1,6 @@
 // @ts-check
 
-const path = require('path');
+const path = require("path");
 
 const PORT = 4000;
 
@@ -14,7 +14,7 @@ if (result.error) throw result.error;
 const express = require("express");
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 /* Database */
 const mysql = require("mysql");
@@ -37,9 +37,7 @@ var validator = require("validator");
 /* Discord API */
 const Discord = require("discord.js");
 const discordClient = new Discord.Client();
-discordClient.on("error", () =>
-  discordClient.login(process.env.REACT_APP_DISCORD_BOT_TOKEN)
-);
+discordClient.on("error", () => discordClient.login(process.env.REACT_APP_DISCORD_BOT_TOKEN));
 discordClient.on("ready", () => {
   console.log(`${discordClient.user.tag} successfully logged in`);
 });
@@ -52,17 +50,10 @@ discordClient.login(process.env.REACT_APP_DISCORD_BOT_TOKEN);
  */
 const discordSendMessage = (message, channelId = "809568968461123618") => {
   const channel = discordClient.channels.cache.get(channelId);
-  if (
-    channel &&
-    channel
-      .send(message + "")
-      .catch((error) => console.error(`discordClient Error: ${error}`))
-  ) {
+  if (channel && channel.send(message + "").catch((error) => console.error(`discordClient Error: ${error}`))) {
     return true;
   } else {
-    console.error(
-      `Discord bot Could not send message to channelid: ${channelId}`
-    );
+    console.error(`Discord bot Could not send message to channelid: ${channelId}`);
     return false;
   }
 };
@@ -79,15 +70,10 @@ const queryDatabase = (res, query, cols, callback) => {
   db.query(query, cols, (err, results) => {
     if (err) {
       console.error(err);
-      return responseError(
-        res,
-        500,
-        "Server encountered an error querying the database"
-      );
+      return responseError(res, 500, "Server encountered an error querying the database");
     }
 
-    if (results == null || results.length === 0)
-      return responseError(res, 200, "Could not find results for query");
+    if (results == null || results.length === 0) return responseError(res, 200, "Could not find results for query");
 
     return callback(results);
   });
@@ -193,8 +179,7 @@ app.get("/api/catalogue/categories", (req, res) => {
     if (perPage != null) limit = parseInt(perPage + "", 10);
     else limit = 10; // default per page
 
-    if (page_ !== page_ || limit !== limit)
-      return responseError(res, 500, "Could not parse query parameters");
+    if (page_ !== page_ || limit !== limit) return responseError(res, 500, "Could not parse query parameters");
 
     const offset = (page_ - 1) * limit;
 
@@ -215,8 +200,7 @@ GROUP BY t.id ${queryPages}`;
   const cols = [...colsSearch, ...colsPages];
 
   return queryDatabase(res, query, cols, (results) => {
-    for (var i = 0; i < results.length; i++)
-      results[i].products = JSON.parse(`[${results[i].products}]`);
+    for (var i = 0; i < results.length; i++) results[i].products = JSON.parse(`[${results[i].products}]`);
 
     res.json(results);
   });
@@ -247,19 +231,12 @@ app.post("/api/orders", (req, res) => {
   customerInfo.name = validator.escape(customerInfo.name + "");
   customerInfo.address = validator.escape(customerInfo.address + "");
   customerInfo.phone = validator.escape(customerInfo.phone + "");
-  customerInfo.comment =
-    customerInfo.comment == null
-      ? ""
-      : validator.escape(customerInfo.comment + "");
+  customerInfo.comment = customerInfo.comment == null ? "" : validator.escape(customerInfo.comment + "");
   paymentMethod = validator.escape(paymentMethod + "");
 
   /* Validate json data */
   if (ACCEPTED_PAYMENT_METHODS.indexOf(paymentMethod) === -1)
-    return responseError(
-      res,
-      422,
-      `Invalid paymentMethod, expected: ${ACCEPTED_PAYMENT_METHODS}`
-    );
+    return responseError(res, 422, `Invalid paymentMethod, expected: ${ACCEPTED_PAYMENT_METHODS}`);
   else if (customerInfo.name.length <= 1 || customerInfo.address.length <= 1)
     return responseError(
       res,
@@ -272,13 +249,7 @@ app.post("/api/orders", (req, res) => {
       422,
       'Invalid value for customerInfo "phone" (number), expected for example: "+49xxxxxxxxxxx"'
     );
-  else if (
-    !items.every(
-      (itm) =>
-        typeof itm.productID === "number" &&
-        typeof itm.productQuantity === "number"
-    )
-  )
+  else if (!items.every((itm) => typeof itm.productID === "number" && typeof itm.productQuantity === "number"))
     return responseError(
       res,
       422,
@@ -308,15 +279,9 @@ app.post("/api/orders", (req, res) => {
       let productDB = results.find((p) => p.id === productPOST.productID);
 
       if (productDB === undefined)
-        return responseError(
-          res,
-          200,
-          `Could not find productID: ${productPOST.productID} in db`
-        );
+        return responseError(res, 200, `Could not find productID: ${productPOST.productID} in db`);
 
-      let price = productDB.price_discounted
-        ? productDB.price_discounted
-        : productDB.price;
+      let price = productDB.price_discounted ? productDB.price_discounted : productDB.price;
       let quantity = productPOST.productQuantity;
       let total = price * quantity;
       let name = productDB.name;
@@ -334,11 +299,7 @@ app.post("/api/orders", (req, res) => {
 # '${moment().format("MMMM Do YYYY, h:mm:ss a")}'
 # Name: '${customerInfo.name}'
 # Address: '${customerInfo.address}'
-# Phone: ${customerInfo.phone}${
-        customerInfo.comment
-          ? "\n# Comment: '" + customerInfo.comment + "'"
-          : ""
-      }
+# Phone: ${customerInfo.phone}${customerInfo.comment ? "\n# Comment: '" + customerInfo.comment + "'" : ""}
 #${table}
 #
 # Payment Method: '${paymentMethod}'
@@ -348,12 +309,7 @@ app.post("/api/orders", (req, res) => {
     );
 
     if (!messageSuccessful)
-      return responseError(
-        res,
-        503,
-        "Could not issue order message, please try again",
-        { "Retry-After": "500" }
-      );
+      return responseError(res, 503, "Could not issue order message, please try again", { "Retry-After": "500" });
 
     // Success
     res.status(200).end();
@@ -361,7 +317,7 @@ app.post("/api/orders", (req, res) => {
 });
 
 app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(PORT, () => {
