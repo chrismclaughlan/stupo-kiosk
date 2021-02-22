@@ -2,9 +2,10 @@
   "name": "stupokiosk-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "src/stupokiosk.js",
+  "main": "stupokiosk.js",
   "scripts": {
-    "start": "nodemon src/stupokiosk.js",
+    "start": "node stupokiosk.js",
+    "dev": "nodemon stupokiosk.js",
     "doc": "jsdoc -c jsdoc.json"
   },
   "repository": {

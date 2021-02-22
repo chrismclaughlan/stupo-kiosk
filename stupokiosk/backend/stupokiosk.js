@@ -1,5 +1,7 @@
 // @ts-check
 
+const path = require('path');
+
 const PORT = 4000;
 
 const moment = require("moment");
@@ -12,6 +14,7 @@ if (result.error) throw result.error;
 const express = require("express");
 const app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'build')));
 
 /* Database */
 const mysql = require("mysql");
@@ -358,8 +361,7 @@ app.post("/api/orders", (req, res) => {
 });
 
 app.get("/*", (req, res) => {
-  res.send("Hello");
-  //res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 app.listen(PORT, () => {
