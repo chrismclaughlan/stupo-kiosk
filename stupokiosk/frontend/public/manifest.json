@@ -1,9 +1,9 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "StuPo Kiosk",
+  "name": "StuPo",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "logo64.png",
       "type": "image/png",
       "sizes": "64x64"
     }
@@ -11,5 +11,6 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "categories": ["kiosk", "business", "food", "shopping", "campus", "university", "students"]
 }

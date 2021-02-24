@@ -1,11 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  useReducer,
-  useCallback,
-  useMemo,
-} from "react";
+import { useState, useEffect, useRef, useReducer, useCallback, useMemo } from "react";
 import Search from "./Components/Search";
 
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
@@ -15,6 +8,8 @@ import Checkout from "./Components/Checkout/Checkout";
 import OrderConfirmed from "./Components/OrderConfirmed";
 import PrivacyPolicy from "./Components/Legal/PrivacyPolicy";
 import TermsAndConditions from "./Components/Legal/TermsAndConditions";
+import WhoAreWe from "./Components/WhoAreWe";
+import ContactUs from "./Components/ContactUs";
 
 import { BasketContext, ItemsContext } from "./Components/Contexts";
 
@@ -98,8 +93,7 @@ const App = () => {
           newState = [...state];
           newState[index].quantityInBasket--;
 
-          if (newState[index].quantityInBasket < 1)
-            newState[index].quantityInBasket = 1;
+          if (newState[index].quantityInBasket < 1) newState[index].quantityInBasket = 1;
 
           return newState;
 
@@ -110,13 +104,8 @@ const App = () => {
     [setAnimateBasket]
   );
 
-  const [basketList, basketDispatch] = useReducer(
-    basketReducer,
-    JSON.parse(localStorage.getItem("basketList")) || []
-  );
-  const basketQuantity = useMemo(() => getBasketQuantity(basketList), [
-    basketList,
-  ]);
+  const [basketList, basketDispatch] = useReducer(basketReducer, JSON.parse(localStorage.getItem("basketList")) || []);
+  const basketQuantity = useMemo(() => getBasketQuantity(basketList), [basketList]);
   const basketPrice = useMemo(() => getBasketPrice(basketList), [basketList]);
 
   /* Catalogue */
@@ -139,19 +128,10 @@ const App = () => {
   };
 
   const handleClickOutside = (e) => {
-    if (
-      searchFocusRef &&
-      searchFocusRef.current &&
-      !searchFocusRef.current.contains(e.target)
-    )
+    if (searchFocusRef && searchFocusRef.current && !searchFocusRef.current.contains(e.target))
       setHideSuggestions(true);
 
-    if (
-      helpMenuRef &&
-      helpMenuRef.current &&
-      !helpMenuRef.current.contains(e.target)
-    )
-      setShowHelp(false);
+    if (helpMenuRef && helpMenuRef.current && !helpMenuRef.current.contains(e.target)) setShowHelp(false);
   };
 
   const categoriesFilter = (newFilter) => {
@@ -219,20 +199,12 @@ const App = () => {
   }, [filter]);
 
   useEffect(() => {
-    if (!fetchingCategoryList || isEndOfCategories || searchingFor != null)
-      return;
+    if (!fetchingCategoryList || isEndOfCategories || searchingFor != null) return;
 
     const queryFilter = filter == null ? "" : `&search=${filter}`;
     const url = `/api/catalogue/categories?page=${categoriesPage}&per_page=${DEFAULT_PER_PAGE}${queryFilter}`;
     fetchCategoryList(url);
-  }, [
-    fetchCategoryList,
-    fetchingCategoryList,
-    isEndOfCategories,
-    searchingFor,
-    categoriesPage,
-    filter,
-  ]);
+  }, [fetchCategoryList, fetchingCategoryList, isEndOfCategories, searchingFor, categoriesPage, filter]);
 
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
@@ -241,24 +213,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <header className="bg-white p-4 flex justify-between items-center border-b border-grey z-50">
-        <div
-          className={
-            "fixed top-0 left-1/2 rounded-b-lg border-b border-r border-l border-red-700 transition-all transform -translate-x-1/2 z-0 bg-red-200 hover:opacity-100" +
-            (errorMsg.length > 0 ? " opacity-100 translate-y-24" : " opacity-0")
-          }
-        >
-          <div className="relative py-4 px-10">
-            {errorMsg}
-            <div
-              onClick={() => setErrorMsg("")}
-              className="absolute top-0 -right-3 w-9 cursor-pointer"
-            >
-              x
-            </div>
-          </div>
-        </div>
-
+      <header className="fixed bg-white p-4 flex justify-between items-center border-b border-grey z-50">
         <div className="ml-0 sm:ml-6">
           <Link
             onClick={() => {
@@ -277,9 +232,7 @@ const App = () => {
             to="/"
             className="flex items-center space-x-4"
           >
-            <div className="inline-block w-10 sm:w-auto font-thin text-2xl">
-              StuPo Kiosk
-            </div>
+            <div className="inline-block w-10 sm:w-auto font-thin text-2xl">StuPo Kiosk</div>
             <img
               className="inline-block mr-3 hidden sm:block rounded w-16"
               src="stupokiosk-tree.png"
@@ -341,23 +294,13 @@ const App = () => {
             <div
               className={
                 "absolute bg-white right-0 top-full w-52 my-1 shadow border border-gray-300 transition-all z-50" +
-                (showHelp
-                  ? " opacity-100"
-                  : " transform translate-x-100 overflow-hidden opacity-50")
+                (showHelp ? " opacity-100" : " transform translate-x-100 overflow-hidden opacity-50")
               }
             >
-              <Link
-                onClick={() => setShowHelp(false)}
-                to="/who-are-we"
-                className="block py-2 px-4 hover:bg-gray-200"
-              >
+              <Link onClick={() => setShowHelp(false)} to="/who-are-we" className="block py-2 px-4 hover:bg-gray-200">
                 Who Are We?
               </Link>
-              <Link
-                onClick={() => setShowHelp(false)}
-                to="/contact-us"
-                className="block py-2 px-4 hover:bg-gray-200"
-              >
+              <Link onClick={() => setShowHelp(false)} to="/contact-us" className="block py-2 px-4 hover:bg-gray-200">
                 Contact Us
               </Link>
               <Link
@@ -384,9 +327,7 @@ const App = () => {
             }
           >
             <div className="overflow-auto">
-              <div className="overflow-none w-full border-b-2 px-10 py-4 text-lg font-medium">
-                Basket
-              </div>
+              <div className="overflow-none w-full border-b-2 px-10 py-4 text-lg font-medium">Basket</div>
               <div className="mt-4">
                 {basketList && basketList.length === 0 && (
                   <div className="w-full px-10 py-2">
@@ -402,9 +343,7 @@ const App = () => {
                         <div className="relative text-lg">
                           <div>{product.name}</div>
                           <div
-                            onClick={() =>
-                              basketDispatch({ type: "remove", product })
-                            }
+                            onClick={() => basketDispatch({ type: "remove", product })}
                             className="absolute -right-7 px-2.5 -top-0.5 w-9 cursor-pointer font-light"
                           >
                             x
@@ -412,22 +351,16 @@ const App = () => {
                         </div>
                         <div className="flex justify-between text-lg font-light pt-2">
                           <div className="flex space-x-4">
-                            <div className="inline">
-                              Quantity: {product.quantityInBasket}
-                            </div>
+                            <div className="inline">Quantity: {product.quantityInBasket}</div>
                             <div>
                               <button
-                                onClick={() =>
-                                  basketDispatch({ type: "decrease", product })
-                                }
+                                onClick={() => basketDispatch({ type: "decrease", product })}
                                 className="inline px-2.5 hover:bg-gray-100"
                               >
                                 -
                               </button>
                               <button
-                                onClick={() =>
-                                  basketDispatch({ type: "increase", product })
-                                }
+                                onClick={() => basketDispatch({ type: "increase", product })}
                                 className="inline px-2.5 hover:bg-gray-100"
                               >
                                 +
@@ -448,14 +381,37 @@ const App = () => {
                 <div>€{basketPrice.toFixed(2)}</div>
               </div>
               <Link to="/order-checkout">
-                <button className="mt-4 py-4 w-full bg-theme-2-300">
-                  Checkout
-                </button>
+                <button className="mt-4 py-4 w-full bg-theme-2-300">Checkout</button>
               </Link>
             </div>
           </div>
         </div>
+        {/* <div className={"fixed left-0 bottom-0 w-screen text-center" + (errorMsg.length === 0 ? " hidden" : "")}>
+          <div className="py-4 px-10 border-t border-red-700 z-0 bg-red-200" onClick={() => setErrorMsg("")}>
+            {errorMsg}
+            <div
+              onClick={() => setErrorMsg("")}
+              className="absolute top-1 right-1 w-10 h-10 cursor-pointer text-lg font-medium"
+            >
+              x
+            </div>
+          </div>
+        </div> */}
       </header>
+
+      <div
+        className={"fixed z-30 w-screen text-center top-24 cursor-pointer" + (errorMsg.length === 0 ? " hidden" : "")}
+      >
+        <div className="bg-red-200 py-1" onClick={() => setErrorMsg("")}>
+          {errorMsg} <div className="inline text-xs font-light">(Click to disappear)</div>
+        </div>
+        <div
+          onClick={() => setErrorMsg("")}
+          className="absolute top-0 right-1 w-10 h-10 cursor-pointer text-lg font-medium"
+        >
+          x
+        </div>
+      </div>
 
       <img
         className="background"
@@ -468,9 +424,7 @@ const App = () => {
 
       <div className={"pt-28 transition-all" + (showBasket ? " sm:mr-96" : "")}>
         <Switch>
-          <BasketContext.Provider
-            value={{ setShowBasket, basketList, basketDispatch, basketPrice }}
-          >
+          <BasketContext.Provider value={{ setShowBasket, basketList, basketDispatch, basketPrice }}>
             <ItemsContext.Provider
               value={{
                 productList,
@@ -482,11 +436,7 @@ const App = () => {
               }}
             >
               <Route exact path="/">
-                <Catalogue
-                  showTopBtn={showTopBtn}
-                  setShowTopBtn={setShowTopBtn}
-                  setErrorMsg={setErrorMsg}
-                />
+                <Catalogue showTopBtn={showTopBtn} setShowTopBtn={setShowTopBtn} setErrorMsg={setErrorMsg} />
               </Route>
             </ItemsContext.Provider>
             <Route path="/order-checkout">
@@ -498,10 +448,16 @@ const App = () => {
             <OrderConfirmed setShowBasket={setShowBasket} />
           </Route>
 
+          {/* Help menu */}
+          <Route path="/who-are-we">
+            <WhoAreWe />
+          </Route>
+          <Route path="/contact-us">
+            <ContactUs />
+          </Route>
           <Route path="/privacy-policy">
             <PrivacyPolicy />
           </Route>
-
           <Route path="/terms-and-conditions">
             <TermsAndConditions />
           </Route>

@@ -237,17 +237,23 @@ app.post("/api/orders", (req, res) => {
   /* Validate json data */
   if (ACCEPTED_PAYMENT_METHODS.indexOf(paymentMethod) === -1)
     return responseError(res, 422, `Invalid paymentMethod, expected: ${ACCEPTED_PAYMENT_METHODS}`);
-  else if (customerInfo.name.length <= 1 || customerInfo.address.length <= 1)
+  else if (
+    customerInfo.name.length < 2 ||
+    customerInfo.name.length > 30 ||
+    customerInfo.address.length < 2 ||
+    customerInfo.address.length > 30
+  )
     return responseError(
       res,
       422,
       'Invalid value for customerInfo "name" or "address", expected string with length > 1'
     );
-  else if (!validator.isMobilePhone(customerInfo.phone))
+  else if (customerInfo.phone.length < 7 || customerInfo.phone.length > 30)
+    //validator.isMobilePhone(customerInfo.phone))
     return responseError(
       res,
       422,
-      'Invalid value for customerInfo "phone" (number), expected for example: "+49xxxxxxxxxxx"'
+      'Invalid value for customerInfo "phone" (number), expeted string with length between 7 and 30"' //expected for example: "+49xxxxxxxxxxx"'
     );
   else if (!items.every((itm) => typeof itm.productID === "number" && typeof itm.productQuantity === "number"))
     return responseError(

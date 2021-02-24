@@ -3,7 +3,7 @@ import CategoriesCreate from "./CCreate";
 import CategoriesUpdate from "./CUpdate";
 import CategoriesDestroy from "./CDestroy";
 
-const Categories = () => {
+const Categories = ({ setError }) => {
   const [list, setList] = useState([]);
   const [doFetchList, setDoFetchList] = useState(true);
 
@@ -15,11 +15,12 @@ const Categories = () => {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
+        if (data.error) setError(data.error);
         if (data) setList(data);
-        else console.log("No data");
       })
       .catch((error) => {
         console.error(error);
+        setError(error);
       });
 
     setDoFetchList(false);

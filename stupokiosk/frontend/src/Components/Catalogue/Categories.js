@@ -3,12 +3,7 @@ import Category from "../Category";
 import { ItemsContext } from "../Contexts";
 
 const CatalogueCategories = (props) => {
-  const {
-    categoryList,
-    isEndOfCategories,
-    setFetchingCategoryList,
-    categoriesFilter,
-  } = useContext(ItemsContext);
+  const { categoryList, isEndOfCategories, setFetchingCategoryList, categoriesFilter } = useContext(ItemsContext);
   const [categorySelectionIndex, setCategorySelectionIndex] = useState(null);
   const lastScroll = useRef(0);
 
@@ -18,14 +13,10 @@ const CatalogueCategories = (props) => {
   });
 
   const handleScroll = () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100)
-      setFetchingCategoryList(true);
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) setFetchingCategoryList(true);
 
     let currentScroll = document.documentElement.scrollTop;
-    if (
-      lastScroll.current > 0 &&
-      (currentScroll > lastScroll.current || currentScroll < 100)
-    ) {
+    if (lastScroll.current > 0 && (currentScroll > lastScroll.current || currentScroll < 200)) {
       /* Scrolling down */
       props.setShowTopBtn(false);
     } else {
@@ -45,34 +36,19 @@ const CatalogueCategories = (props) => {
     <>
       <div className="flex justify-center">
         <div className="flex flex-wrap justify-around w-full md:w-3/4 lg:w-4/6 xl:w-1/2 border-b-2 pt-6 pb-4 mb-2">
-          <button
-            onClick={(e) => categoriesFilter(null)}
-            className="btn-standard"
-          >
+          <button onClick={(e) => categoriesFilter(null)} className="btn-standard">
             All
           </button>
-          <button
-            onClick={(e) => categoriesFilter(e.target.innerText)}
-            className="btn-standard"
-          >
+          <button onClick={(e) => categoriesFilter(e.target.innerText)} className="btn-standard">
             Food
           </button>
-          <button
-            onClick={(e) => categoriesFilter(e.target.innerText)}
-            className="btn-standard"
-          >
+          <button onClick={(e) => categoriesFilter(e.target.innerText)} className="btn-standard">
             Drinks
           </button>
-          <button
-            onClick={(e) => categoriesFilter(e.target.innerText)}
-            className="btn-standard"
-          >
+          <button onClick={(e) => categoriesFilter(e.target.innerText)} className="btn-standard">
             School
           </button>
-          <button
-            onClick={(e) => categoriesFilter(e.target.innerText)}
-            className="btn-standard"
-          >
+          <button onClick={(e) => categoriesFilter(e.target.innerText)} className="btn-standard">
             Cleaning
           </button>
         </div>
@@ -97,8 +73,7 @@ const CatalogueCategories = (props) => {
       </div>
       <div
         className={
-          "absolute left-1/2 transform -translate-x-1/2 mt-10 overflow-hidden" +
-          (isEndOfCategories ? " hidden" : "")
+          "absolute left-1/2 transform -translate-x-1/2 mt-10 overflow-hidden" + (isEndOfCategories ? " hidden" : "")
         }
       >
         <button

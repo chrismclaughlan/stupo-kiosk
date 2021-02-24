@@ -4,7 +4,8 @@
   "description": "Backend of admin panel to manage database behind the scenes",
   "main": "admin-stupokiosk.js",
   "scripts": {
-    "start": "nodemon admin-stupokiosk.js"
+    "start": "node admin-stupokiosk.js",
+    "dev": "nodemon admin-stupokiosk.js"
   },
   "repository": {
     "type": "git",

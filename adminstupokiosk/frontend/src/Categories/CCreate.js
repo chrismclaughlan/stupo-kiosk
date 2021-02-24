@@ -19,7 +19,9 @@ const CategoriesCreate = ({ setDoFetchList }) => {
       method: "post",
       body: fd,
     })
-      .then((res) => handleReset())
+      .then((res) => {
+        handleReset();
+      })
       .catch((error) => console.error(error));
   };
 

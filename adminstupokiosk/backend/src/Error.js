@@ -5,7 +5,7 @@ const callback = (res, type, message, detail = null, code = 200) => {
     detail,
   };
   console.error(error);
-  res.status(code).json(error);
+  res.status(code).json({ error });
 };
 
 module.exports = { callback };
